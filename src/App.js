@@ -1,9 +1,6 @@
-function App() {
-  return (
-    <div>
-      <p>Here will be candlestic-chart</p>
-    </div>
-  );
-}
+import Widget from "./components/Widget";
+const App = () => {
+  return <Widget />;
+};
 
 export default App;
