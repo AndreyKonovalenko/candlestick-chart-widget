@@ -98,6 +98,40 @@ const Widget = () => {
     return <div style={styles.display}>{children}</div>;
   };
 
+  const Header = (props) => {
+    const { children } = props;
+    const styles = {
+      header: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: '0px',
+        gap: '120px',
+      },
+    };
+    return <div style={styles.header}>{children}</div>;
+  };
+  const HeaderItem = (props) => {
+    const { children, color } = props;
+    const styles = {
+      headerItem: {
+        height: '22px',
+      },
+      headerItemText: {
+        fontFamily: 'Roboto',
+        fontStyle: 'normal',
+        fontWeight: '400',
+        fontSize: '19px',
+        lineHeight: '115%',
+        color: color || '#72ED93',
+      },
+    };
+    return (
+      <div style={styles.headerItem}>
+        <p style={styles.headerItemText}>{children}</p>
+      </div>
+    );
+  };
   const intervals = ['Time', '15m', '1H', '4H', '1D', '1W'];
 
   // const data = [];
@@ -107,9 +141,14 @@ const Widget = () => {
   // console.log(typeof data);
   const widget = (
     <PriceChart>
-      <Display></Display>
-      <div style={styles.ticketContainer}> BTC/USDT Price Chart</div>
-      <div style={styles.dateContainer}> 23 Septemper 13:00</div>
+      <Display>
+        <Header>
+          <HeaderItem>BTC/USDT Price Chart</HeaderItem>
+          <HeaderItem color={'#FFFFFF'}>23 Septemper 13:00</HeaderItem>
+        </Header>
+      </Display>
+      {/* <div style={styles.ticketContainer}> BTC/USDT Price Chart</div>
+      <div style={styles.dateContainer}> 23 Septemper 13:00</div> */}
       <div style={styles.intervalBar}>
         {intervals.map((element) => (
           <div key={uniqid()} style={styles.intervalStyle}>
