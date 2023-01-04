@@ -1,22 +1,8 @@
-import { oneHour } from '../__mocks__/data';
+import { Children } from 'react';
 import uniqid from 'uniqid';
 
 const Widget = () => {
   const styles = {
-    widgetContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'flexStart',
-      padding: '0px',
-      position: 'absolute',
-      width: '510px',
-      height: '308px',
-      left: '26px',
-      top: '26px',
-      background: 'rgba(0, 0, 0, 0.7)',
-      borderRadius: '10px',
-    },
     ticketContainer: {
       marginTop: '15px',
       marginLeft: '15px',
@@ -40,7 +26,7 @@ const Widget = () => {
       right: '0%',
       top: '0%',
       bottom: '0%',
-      fontFamily: 'Roboto',
+      fontFamily: 'inherit',
       fontStyle: 'normal',
       fontWeight: '400',
       fontSize: '19px',
@@ -67,9 +53,49 @@ const Widget = () => {
       fontSize: '17px',
       fontWeight: '400',
       color: '#8D8D8D',
-      fontFamily: 'Roboto',
+      fontFamily: 'inherit',
       fontStyle: 'normal',
     },
+  };
+
+  const PriceChart = (props) => {
+    const { children } = props;
+    const styles = {
+      priceChart: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'flexStart',
+        padding: '0px',
+        position: 'absolute',
+        width: '510px',
+        height: '308px',
+        left: '26px',
+        top: '26px',
+        background: 'rgba(0, 0, 0, 0.7)',
+        borderRadius: '10px',
+        fontFamily: 'Roboto, sans-serif',
+      },
+    };
+
+    return <div style={styles.priceChart}>{children}</div>;
+  };
+
+  const Display = (props) => {
+    const { children } = props;
+    const styles = {
+      display: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        padding: '15px',
+        gap: '10px',
+        widget: '510px',
+        height: ' 268px',
+      },
+    };
+
+    return <div style={styles.display}>{children}</div>;
   };
 
   const intervals = ['Time', '15m', '1H', '4H', '1D', '1W'];
@@ -80,7 +106,8 @@ const Widget = () => {
   // });
   // console.log(typeof data);
   const widget = (
-    <div style={styles.widgetContainer}>
+    <PriceChart>
+      <Display></Display>
       <div style={styles.ticketContainer}> BTC/USDT Price Chart</div>
       <div style={styles.dateContainer}> 23 Septemper 13:00</div>
       <div style={styles.intervalBar}>
@@ -90,7 +117,7 @@ const Widget = () => {
           </div>
         ))}
       </div>
-    </div>
+    </PriceChart>
   );
 
   return widget;
