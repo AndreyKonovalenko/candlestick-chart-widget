@@ -1,5 +1,5 @@
 const TimePicker = (props) => {
-  const { children, onClick } = props;
+  const { children, onClick, isActive } = props;
   const styles = {
     timePicker: {
       display: 'flex',
@@ -7,7 +7,7 @@ const TimePicker = (props) => {
       alignItems: 'flex-start',
       padding: '10px 5px',
       gap: '10px',
-      color: '#898989',
+      color: !isActive ? '#898989' : '#FFFFFF',
       cursor: 'pointer',
     },
     timePickerText: {

@@ -1,5 +1,4 @@
-import axios from 'axios';
-import uniqid from 'uniqid';
+import { useState } from 'react';
 import PriceChart from './PriceChart';
 import Display from './display/Display';
 import DisplayHeader from './display/DisplayHeader';
@@ -7,10 +6,13 @@ import DisplayHeaderItem from './display/DisplayHeaderItem';
 import TimeSwitch from './timeSwitch/TimeSwitch';
 import TimePicker from './timeSwitch/TimePicker';
 
+import axios from 'axios';
+import uniqid from 'uniqid';
 axios.defaults.baseURL = 'https://api.binance.com/';
 
 const Widget = () => {
   const intervals = ['Time', '15m', '1h', '4h', '1d', '1w'];
+  const [active, setActive] = useState(null);
 
   const onSwitchClickHandler = (interval) => {
     axios
@@ -32,11 +34,13 @@ const Widget = () => {
       .finally(() => {
         console.log('loading complited!, the shout set is loading');
       });
+    setActive(interval);
   };
 
   const data = intervals.map((element, index) => (
     <TimePicker
       key={uniqid()}
+      isActive={element === active ? true : false}
       onClick={
         index === 0 ? null : (event) => onSwitchClickHandler(element, event)
       }>
