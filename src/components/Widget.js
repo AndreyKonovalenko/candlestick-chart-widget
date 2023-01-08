@@ -6,6 +6,9 @@ import DisplayHeaderItem from './display/DisplayHeaderItem';
 import TimeSwitch from './timeSwitch/TimeSwitch';
 import TimePicker from './timeSwitch/TimePicker';
 import TimePickerHeader from './timeSwitch/TimePickerHeader';
+import DataColumns from './display/dataColumns/DataColumns';
+import DataItem from './display/dataColumns/DataItem';
+import ChartContainer from './display/chart/ChartContainer';
 
 import axios from 'axios';
 import uniqid from 'uniqid';
@@ -58,6 +61,24 @@ const Widget = () => {
             23 Septemper 13:00
           </DisplayHeaderItem>
         </DisplayHeader>
+        <ChartContainer />
+        <DataColumns>
+          <DataItem
+            header={'Open/Close'}
+            firstArg={'19730.36'}
+            secondArg={'19782.39'}
+          />
+          <DataItem
+            header={'High/Low'}
+            firstArg={'19844.00'}
+            secondArg={'19633.10'}
+          />
+          <DataItem
+            header={'Change/Amplitude'}
+            firstArg={'-1.06%'}
+            secondArg={'0.26%'}
+          />
+        </DataColumns>
       </Display>
       <TimeSwitch>{data}</TimeSwitch>
     </PriceChart>
