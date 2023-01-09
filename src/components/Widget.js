@@ -9,6 +9,7 @@ import TimePickerHeader from "./timeSwitch/TimePickerHeader";
 import DataColumns from "./display/dataColumns/DataColumns";
 import DataItem from "./display/dataColumns/DataItem";
 import ChartContainer from "./display/chart/ChartContainer";
+import CandleContainer from "./display/chart/CandleContainer";
 import { findMaxMin } from "./utils/utils";
 
 import axios from "axios";
@@ -59,6 +60,13 @@ const Widget = () => {
 
   data.unshift(<TimePickerHeader key={uniqid()} />);
 
+  let candleSticks;
+  if (candleData !== null) {
+    candleSticks = candleData.map((element) => (
+      <CandleContainer key={uniqid()}></CandleContainer>
+    ));
+  }
+
   useEffect(() => {
     console.log(candleData);
     console.log(isLoading);
@@ -73,7 +81,9 @@ const Widget = () => {
             23 Septemper 13:00
           </DisplayHeaderItem>
         </DisplayHeader>
-        <ChartContainer />
+        <ChartContainer>
+          {candleData !== null ? candleSticks : null}
+        </ChartContainer>
         <DataColumns>
           <DataItem
             header={"Open/Close"}
