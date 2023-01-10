@@ -21,6 +21,7 @@ const Widget = () => {
   const [active, setActive] = useState(null);
   const [candleData, setCandleData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [spread, setSpread] = useState(null);
 
   const onSwitchClickHandler = (interval) => {
     setIsLoading(true);
@@ -35,7 +36,7 @@ const Widget = () => {
       .then((response) => {
         // handle success
         setCandleData(response.data);
-        console.log(findMaxMin(response.data));
+        setSpread(findMaxMin(response.data));
       })
       .catch((error) => {
         // handle error
@@ -61,16 +62,21 @@ const Widget = () => {
   data.unshift(<TimePickerHeader key={uniqid()} />);
 
   let candleSticks;
-  if (candleData !== null) {
+  if (candleData !== null && spread !== null) {
     candleSticks = candleData.map((element) => (
-      <CandleContainer key={uniqid()}></CandleContainer>
+      <CandleContainer
+        key={uniqid()}
+        spread={spread}
+        open={parseFloat(element[1])}
+        high={parseFloat(element[2])}
+        low={parseFloat(element[3])}
+        close={parseFloat(element[4])}
+      ></CandleContainer>
     ));
   }
 
-  useEffect(() => {
-    console.log(candleData);
-    console.log(isLoading);
-  }, [isLoading, candleData]);
+  // useEffect(() => {
+  // }, [isLoading, candleData]);
 
   const widget = (
     <PriceChart>
@@ -82,7 +88,7 @@ const Widget = () => {
           </DisplayHeaderItem>
         </DisplayHeader>
         <ChartContainer>
-          {candleData !== null ? candleSticks : null}
+          {candleData !== null && spread !== null ? candleSticks : null}
         </ChartContainer>
         <DataColumns>
           <DataItem

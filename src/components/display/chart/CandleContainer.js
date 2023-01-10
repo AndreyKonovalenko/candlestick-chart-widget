@@ -1,7 +1,7 @@
 import { useRef, useEffect } from "react";
 const CandleContainer = (props) => {
   const canvasRef = useRef(null);
-  const { children } = props;
+  const { spread, open, high, low, close } = props;
   const styles = {
     candleContainer: {
       width: "15px",
@@ -12,22 +12,29 @@ const CandleContainer = (props) => {
     },
   };
 
-  const draw = (ctx) => {
-    ctx.beginPath();
-    ctx.fillStyle = "#BC1C34";
-    ctx.fillRect(0, 0, 7, 100);
-  };
+  const step = spread.spread / 115; // means canvas height in px =  115px
+  console.log(spread.max, spread.min, spread.spread, high, step);
+  const y = (spread.max - high) / step;
+  const height = 115 - (low - spread.min) * step;
+  console.log(step, y);
 
   useEffect(() => {
+    const draw = (ctx) => {
+      ctx.beginPath();
+      ctx.fillStyle = "#BC1C34";
+      ctx.fillRect(4, y, 7, height);
+    };
+
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
     draw(context);
-  }, [draw]);
+  });
 
   return (
-    <div style={styles.candleContainer}>
-      <canvas ref={canvasRef} width="15" height="115"></canvas>
-    </div>
+    // <div style={styles.candleContainer}>
+    //   <canvas ref={canvasRef} width="15" height="115"></canvas>
+    // </div>
+    <canvas ref={canvasRef} width="15" height="115"></canvas>
   );
 };
 export default CandleContainer;
