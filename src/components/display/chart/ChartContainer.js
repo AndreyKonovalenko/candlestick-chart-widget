@@ -4,6 +4,7 @@ const ChartContainer = (props) => {
     chartContainer: {
       display: "flex",
       flexDirection: "row",
+      justifyContent: "space-between",
       width: "480px",
       height: "115px",
       flex: "none",
