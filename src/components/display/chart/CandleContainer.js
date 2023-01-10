@@ -14,22 +14,27 @@ const CandleContainer = (props) => {
 
   const step = spread.spread / 115; // means canvas height in px =  115px
   console.log(spread.max, spread.min, spread.spread, high, step);
-  const y = (spread.max - high) / step;
-  const height = (high - low) / step;
-  console.log(step, y);
+  const y0 = (spread.max - high) / step;
+  const y1 = (spread.max - low) / step;
+
+  // open price >= close price
+
+  const y =
+    open >= close ? (spread.max - open) / step : (spread.max - close) / step;
+  const height = open >= close ? (open - close) / step : (close - open) / step;
 
   useEffect(() => {
     const draw = (ctx) => {
       ctx.beginPath();
-      // ctx.fillStyle = "#BC1C34";
-      //   ctx.moveTo(x, this.data[i].h);
-
-      ctx.moveTo(8, y);
-      ctx.lineTo(8, height);
-      // ctx.lineWidth = 1;
-      ctx.strokeStyle = "#BC1C34";
+      ctx.moveTo(8, y0);
+      ctx.lineTo(8, y1);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = open >= close ? "#72ED93" : "#BC1C34";
       ctx.stroke();
-      // ctx.fillRect(4, y, 7, height);
+      // ctx.beginPath();
+      ctx.beginPath();
+      ctx.fillRect(4, y, 7, height);
+      ctx.fillStyle = open >= close ? "#72ED93" : "#BC1C34";
     };
 
     const canvas = canvasRef.current;
