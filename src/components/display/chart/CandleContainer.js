@@ -15,14 +15,21 @@ const CandleContainer = (props) => {
   const step = spread.spread / 115; // means canvas height in px =  115px
   console.log(spread.max, spread.min, spread.spread, high, step);
   const y = (spread.max - high) / step;
-  const height = 115 - (low - spread.min) * step;
+  const height = (high - low) / step;
   console.log(step, y);
 
   useEffect(() => {
     const draw = (ctx) => {
       ctx.beginPath();
-      ctx.fillStyle = "#BC1C34";
-      ctx.fillRect(4, y, 7, height);
+      // ctx.fillStyle = "#BC1C34";
+      //   ctx.moveTo(x, this.data[i].h);
+
+      ctx.moveTo(8, y);
+      ctx.lineTo(8, height);
+      // ctx.lineWidth = 1;
+      ctx.strokeStyle = "#BC1C34";
+      ctx.stroke();
+      // ctx.fillRect(4, y, 7, height);
     };
 
     const canvas = canvasRef.current;
