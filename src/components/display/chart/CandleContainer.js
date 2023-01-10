@@ -27,15 +27,19 @@ const CandleContainer = (props) => {
   useEffect(() => {
     const draw = (ctx) => {
       ctx.strokeStyle = open >= close ? "#72ED93" : "#BC1C34";
+
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(4, yLine0);
-      ctx.lineTo(4, yLine1);
-      ctx.stroke();
-      ctx.lineWidth = 7;
-      ctx.beginPath();
+      ctx.lineTo(4, yRect0);
+
       ctx.moveTo(0, yRect0);
+      ctx.lineWidth = 7;
       ctx.lineTo(0, yRect1);
+      ctx.lineWidth = 1;
+      ctx.moveTo(4, yRect1);
+      ctx.lineTo(4, yLine1);
+
       ctx.stroke();
     };
 
