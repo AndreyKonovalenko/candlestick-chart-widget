@@ -14,3 +14,20 @@ export const findMaxMin = (arr) => {
     spread: spread,
   };
 };
+
+export const getDate = (date) => {
+  const newDate = new Date(date);
+  const day = new Intl.DateTimeFormat('en-US', { day: 'numeric' }).format(
+    newDate
+  );
+  const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(
+    newDate
+  );
+  const time = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: false,
+  }).format(newDate);
+
+  return `${day} ${month} ${time}`;
+};
