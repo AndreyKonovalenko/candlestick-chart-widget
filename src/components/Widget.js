@@ -9,8 +9,8 @@ import TimePickerHeader from './timeSwitch/TimePickerHeader';
 import DataColumns from './display/dataColumns/DataColumns';
 import DataItem from './display/dataColumns/DataItem';
 import ChartContainer from './display/chart/ChartContainer';
-import CandleContainer from './display/chart/CandleContainer';
-import { findMaxMin, getDate } from './utils/utils';
+import CandleStick from './display/chart/CandleStick';
+import { findMaxMin, getDate } from '../utils/utils';
 
 import axios from 'axios';
 import uniqid from 'uniqid';
@@ -45,13 +45,13 @@ const Widget = () => {
       })
       .finally(() => {
         setIsLoading(false);
-        console.log('loading complited!, the shout set is loading');
+        console.log('loading complited!');
       });
   };
 
   const onSwitchClickHandler = (interval) => {
     setIsLoading(true);
-    setCandleData(false);
+    setCandleIsSelected(false);
     fetchData(interval);
     setActive(interval);
   };
@@ -71,23 +71,26 @@ const Widget = () => {
 
   data.unshift(<TimePickerHeader key={uniqid()} />);
 
-  let candleSticks;
-  if (candleData !== null && spread !== null) {
-    candleSticks = candleData.map((element) => (
-      <CandleContainer
-        key={uniqid()}
-        spread={spread}
-        open={parseFloat(element[1])}
-        high={parseFloat(element[2])}
-        low={parseFloat(element[3])}
-        isSelected={element === candleIsSelected ? true : false}
-        onClick={(event) => onCandleSelectHandler(element, event)}
-        close={parseFloat(element[4])}></CandleContainer>
-    ));
-  }
+  const candleSticks =
+    spread !== null
+      ? candleData.map((element) => (
+          <CandleStick
+            key={uniqid()}
+            spread={spread}
+            open={parseFloat(element[1])}
+            high={parseFloat(element[2])}
+            close={parseFloat(element[4])}
+            low={parseFloat(element[3])}
+            isSelected={element === candleIsSelected ? true : false}
+            onClick={(event) =>
+              onCandleSelectHandler(element, event)
+            }></CandleStick>
+        ))
+      : null;
 
   useEffect(() => {
-    if (candleData & !candleIsSelected) {
+    console.log('re-render main!');
+    if (candleData) {
       setCandleIsSelected(candleData[candleData.length - 1]);
     }
   }, [candleData, candleIsSelected]);
@@ -101,9 +104,7 @@ const Widget = () => {
             {candleIsSelected ? getDate(candleIsSelected[0]) : null}
           </DisplayHeaderItem>
         </DisplayHeader>
-        <ChartContainer>
-          {candleData !== null && spread !== null ? candleSticks : null}
-        </ChartContainer>
+        <ChartContainer>{candleSticks}</ChartContainer>
         <DataColumns>
           <DataItem
             header={'Open/Close'}
