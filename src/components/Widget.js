@@ -18,10 +18,9 @@ axios.defaults.baseURL = 'https://api.binance.com/';
 
 const Widget = () => {
   const intervals = ['15m', '1h', '4h', '1d', '1w'];
-  const [active, setActive] = useState(false);
-  const [candleIsSelected, setCandleIsSelected] = useState(false);
+  const [active, setActive] = useState('15m');
+  const [candleIsSelected, setCandleIsSelected] = useState(null);
   const [candleData, setCandleData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
   const [spread, setSpread] = useState(null);
 
   //axios
@@ -44,14 +43,12 @@ const Widget = () => {
         console.log(error);
       })
       .finally(() => {
-        setIsLoading(false);
+        setCandleIsSelected(null);
         console.log('loading complited!');
       });
   };
 
   const onSwitchClickHandler = (interval) => {
-    setIsLoading(true);
-    setCandleIsSelected(false);
     fetchData(interval);
     setActive(interval);
   };
@@ -90,7 +87,10 @@ const Widget = () => {
 
   useEffect(() => {
     console.log('re-render main!');
-    if (candleData) {
+    if (candleData === null) {
+      fetchData('15m');
+    }
+    if (candleData && candleIsSelected === null) {
       setCandleIsSelected(candleData[candleData.length - 1]);
     }
   }, [candleData, candleIsSelected]);
