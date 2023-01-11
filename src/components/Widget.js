@@ -51,6 +51,7 @@ const Widget = () => {
 
   const onSwitchClickHandler = (interval) => {
     setIsLoading(true);
+    setCandleData(false);
     fetchData(interval);
     setActive(interval);
   };
@@ -86,7 +87,7 @@ const Widget = () => {
   }
 
   useEffect(() => {
-    if (candleData) {
+    if (candleData & !candleIsSelected) {
       setCandleIsSelected(candleData[candleData.length - 1]);
     }
   }, [candleData, candleIsSelected]);
