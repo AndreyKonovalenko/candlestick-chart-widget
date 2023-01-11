@@ -76,8 +76,8 @@ const Widget = () => {
             spread={spread}
             open={parseFloat(element[1])}
             high={parseFloat(element[2])}
-            close={parseFloat(element[4])}
             low={parseFloat(element[3])}
+            close={parseFloat(element[4])}
             isSelected={element === candleIsSelected ? true : false}
             onClick={(event) =>
               onCandleSelectHandler(element, event)
@@ -108,18 +108,52 @@ const Widget = () => {
         <DataColumns>
           <DataItem
             header={'Open/Close'}
-            firstArg={'19730.36'}
-            secondArg={'19782.39'}
+            firstArg={
+              candleIsSelected
+                ? parseFloat(candleIsSelected[1]).toFixed(2)
+                : null
+            }
+            secondArg={
+              candleIsSelected
+                ? parseFloat(candleIsSelected[4]).toFixed(2)
+                : null
+            }
           />
           <DataItem
             header={'High/Low'}
-            firstArg={'19844.00'}
-            secondArg={'19633.10'}
+            firstArg={
+              candleIsSelected
+                ? parseFloat(candleIsSelected[2]).toFixed(2)
+                : null
+            }
+            secondArg={
+              candleIsSelected
+                ? parseFloat(candleIsSelected[3]).toFixed(2)
+                : null
+            }
           />
           <DataItem
             header={'Change/Amplitude'}
-            firstArg={'-1.06%'}
-            secondArg={'0.26%'}
+            firstArg={
+              candleIsSelected
+                ? `${(
+                    (parseFloat(candleIsSelected[1]) /
+                      parseFloat(candleIsSelected[4])) *
+                      100 -
+                    100
+                  ).toFixed(2)}%`
+                : null
+            }
+            secondArg={
+              candleIsSelected
+                ? `${(
+                    (parseFloat(candleIsSelected[2]) /
+                      parseFloat(candleIsSelected[3])) *
+                      100 -
+                    100
+                  ).toFixed(2)}%`
+                : null
+            }
           />
         </DataColumns>
       </Display>
