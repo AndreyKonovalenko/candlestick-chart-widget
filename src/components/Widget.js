@@ -1,24 +1,26 @@
-import { useState, useEffect } from 'react';
-import PriceChart from './PriceChart';
-import Display from './display/Display';
-import DisplayHeader from './display/DisplayHeader';
-import DisplayHeaderItem from './display/DisplayHeaderItem';
-import TimeSwitch from './timeSwitch/TimeSwitch';
-import TimePicker from './timeSwitch/TimePicker';
-import TimePickerHeader from './timeSwitch/TimePickerHeader';
-import DataColumns from './display/dataColumns/DataColumns';
-import DataItem from './display/dataColumns/DataItem';
-import ChartContainer from './display/chart/ChartContainer';
-import CandleStick from './display/chart/CandleStick';
-import { findMaxMin, getDate } from '../utils/utils';
+import { useState, useEffect } from "react";
+import useDeviceDetect from "./hooks/useDeviceDetect";
+import PriceChart from "./PriceChart";
+import Display from "./display/Display";
+import DisplayHeader from "./display/DisplayHeader";
+import DisplayHeaderItem from "./display/DisplayHeaderItem";
+import TimeSwitch from "./timeSwitch/TimeSwitch";
+import TimePicker from "./timeSwitch/TimePicker";
+import TimePickerHeader from "./timeSwitch/TimePickerHeader";
+import DataColumns from "./display/dataColumns/DataColumns";
+import DataItem from "./display/dataColumns/DataItem";
+import ChartContainer from "./display/chart/ChartContainer";
+import CandleStick from "./display/chart/CandleStick";
+import { findMaxMin, getDate } from "../utils/utils";
 
-import axios from 'axios';
-import uniqid from 'uniqid';
-axios.defaults.baseURL = 'https://api.binance.com/';
+import axios from "axios";
+import uniqid from "uniqid";
+axios.defaults.baseURL = "https://api.binance.com/";
 
 const Widget = () => {
-  const intervals = ['15m', '1h', '4h', '1d', '1w'];
-  const [active, setActive] = useState('15m');
+  const intervals = ["15m", "1h", "4h", "1d", "1w"];
+  const { isMobile } = useDeviceDetect();
+  const [active, setActive] = useState("15m");
   const [candleIsSelected, setCandleIsSelected] = useState(null);
   const [candleData, setCandleData] = useState(null);
   const [spread, setSpread] = useState(null);
@@ -26,11 +28,11 @@ const Widget = () => {
   //axios
   const fetchData = (interval) => {
     axios
-      .get('/api/v3/klines', {
+      .get("/api/v3/klines", {
         params: {
-          symbol: 'BTCUSDT',
+          symbol: "BTCUSDT",
           interval: interval,
-          limit: '32',
+          limit: "32",
         },
       })
       .then((response) => {
@@ -44,7 +46,7 @@ const Widget = () => {
       })
       .finally(() => {
         setCandleIsSelected(null);
-        console.log('loading complited!');
+        console.log("loading complited!");
       });
   };
 
@@ -61,7 +63,8 @@ const Widget = () => {
     <TimePicker
       key={uniqid()}
       isActive={element === active ? true : false}
-      onClick={(event) => onSwitchClickHandler(element, event)}>
+      onClick={(event) => onSwitchClickHandler(element, event)}
+    >
       {index === 0 ? element : element.toUpperCase()}
     </TimePicker>
   ));
@@ -79,16 +82,16 @@ const Widget = () => {
             low={parseFloat(element[3])}
             close={parseFloat(element[4])}
             isSelected={element === candleIsSelected ? true : false}
-            onClick={(event) =>
-              onCandleSelectHandler(element, event)
-            }></CandleStick>
+            onClick={(event) => onCandleSelectHandler(element, event)}
+          ></CandleStick>
         ))
       : null;
 
   useEffect(() => {
-    console.log('re-render main!');
+    console.log("re-render main!");
+    console.log("isMobale: ", isMobile);
     if (candleData === null) {
-      fetchData('15m');
+      fetchData("15m");
     }
     if (candleData && candleIsSelected === null) {
       setCandleIsSelected(candleData[candleData.length - 1]);
@@ -100,14 +103,14 @@ const Widget = () => {
       <Display>
         <DisplayHeader>
           <DisplayHeaderItem>BTC/USDT Price Chart</DisplayHeaderItem>
-          <DisplayHeaderItem color={'#FFFFFF'}>
+          <DisplayHeaderItem color={"#FFFFFF"}>
             {candleIsSelected ? getDate(candleIsSelected[0]) : null}
           </DisplayHeaderItem>
         </DisplayHeader>
         <ChartContainer>{candleSticks}</ChartContainer>
         <DataColumns>
           <DataItem
-            header={'Open/Close'}
+            header={"Open/Close"}
             firstArg={
               candleIsSelected
                 ? parseFloat(candleIsSelected[1]).toFixed(2)
@@ -120,7 +123,7 @@ const Widget = () => {
             }
           />
           <DataItem
-            header={'High/Low'}
+            header={"High/Low"}
             firstArg={
               candleIsSelected
                 ? parseFloat(candleIsSelected[2]).toFixed(2)
@@ -133,7 +136,7 @@ const Widget = () => {
             }
           />
           <DataItem
-            header={'Change/Amplitude'}
+            header={"Change/Amplitude"}
             firstArg={
               candleIsSelected
                 ? `${(
