@@ -1,4 +1,6 @@
+import theme from "../../../theme/theme";
 const DataItem = (props) => {
+  const { displayColors, fontFamely } = theme;
   const { header, firstArg, secondArg } = props;
   const styles = {
     dataItem: {
@@ -8,20 +10,20 @@ const DataItem = (props) => {
       padding: "0px",
     },
     headerText: {
-      fontFamely: "Roboto",
+      fontFamely: fontFamely,
       fontStyle: "normal",
       fontWeight: "300",
       fontSize: "18px",
       lineHeight: "115%",
-      color: "#8D8D8D",
+      color: displayColors.dataHeader,
     },
     valuesText: {
-      fontFamely: "Roboto",
+      fontFamely: fontFamely,
       fontStyle: "normal",
       fontWeight: "300",
       fontSize: "30px",
       lineHeight: "100%",
-      color: "#FFFFFF",
+      color: displayColors.data,
     },
   };
   return (

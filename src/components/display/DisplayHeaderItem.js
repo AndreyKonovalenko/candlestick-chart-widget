@@ -1,16 +1,18 @@
+import theme from "../../theme/theme";
 const DisplayHeaderItem = (props) => {
-  const { children, color } = props;
+  const { fontFace, displayColors } = theme;
+  const { children, altColor } = props;
   const styles = {
     headerItem: {
-      height: '22px',
+      height: "22px",
     },
     headerItemText: {
-      fontFamily: 'Roboto',
-      fontStyle: 'normal',
-      fontWeight: '400',
-      fontSize: '19px',
-      lineHeight: '115%',
-      color: color || '#72ED93',
+      fontFamily: fontFace,
+      fontStyle: "normal",
+      fontWeight: "400",
+      fontSize: "19px",
+      lineHeight: "115%",
+      color: altColor ? displayColors.headerDate : displayColors.headerText,
     },
   };
   return (

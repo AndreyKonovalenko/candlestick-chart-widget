@@ -103,7 +103,7 @@ const Widget = () => {
       <Display>
         <DisplayHeader>
           <DisplayHeaderItem>BTC/USDT Price Chart</DisplayHeaderItem>
-          <DisplayHeaderItem color={"#FFFFFF"}>
+          <DisplayHeaderItem altColor>
             {candleIsSelected ? getDate(candleIsSelected[0]) : null}
           </DisplayHeaderItem>
         </DisplayHeader>

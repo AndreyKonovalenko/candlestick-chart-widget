@@ -1,5 +1,5 @@
-import { useRef, useEffect } from 'react';
-import theme from '../../../theme/theme';
+import { useRef, useEffect } from "react";
+import theme from "../../../theme/theme";
 
 const CandleStick = (props) => {
   const canvasRef = useRef(null);
@@ -7,7 +7,7 @@ const CandleStick = (props) => {
   const { candleColors } = theme;
   const styles = {
     canvas: {
-      cursor: 'pointer',
+      cursor: "pointer",
     },
   };
   const step = spread.spread / 115; // price value in one px of canvas height.
@@ -47,7 +47,7 @@ const CandleStick = (props) => {
     };
 
     const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
+    const context = canvas.getContext("2d");
     draw(context, isSelected);
   }, [
     candleColors.bearish,
@@ -67,9 +67,10 @@ const CandleStick = (props) => {
     <canvas
       ref={canvasRef}
       style={styles.canvas}
-      width='7'
-      height='115'
-      onClick={onClick}></canvas>
+      width="7"
+      height="115"
+      onClick={onClick}
+    ></canvas>
   );
 };
 export default CandleStick;
