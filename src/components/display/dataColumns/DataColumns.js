@@ -4,6 +4,7 @@ const DataColumns = (props) => {
     dataColumns: {
       display: 'flex',
       flexDirection: 'row',
+      alignItems: 'flex-start',
       padding: '0px',
       gap: '20px',
       width: '436px',
