@@ -109,8 +109,10 @@ const Widget = () => {
         <PriceChart isMobile={isMobile}>
           <Display isMobile={isMobile}>
             <DisplayHeader isMobile={isMobile}>
-              <DisplayHeaderItem>ETH/USDT Price Chart</DisplayHeaderItem>
-              <DisplayHeaderItem altColor>
+              <DisplayHeaderItem isMobile={isMobile}>
+                ETH/USDT Price Chart
+              </DisplayHeaderItem>
+              <DisplayHeaderItem isMobile={isMobile} altColor>
                 {candleIsSelected
                   ? getDate(candleIsSelected[0], isMobile)
                   : null}

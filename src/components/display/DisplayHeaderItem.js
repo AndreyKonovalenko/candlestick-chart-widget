@@ -1,18 +1,20 @@
-import theme from "../../theme/theme";
+import theme from '../../theme/theme';
 const DisplayHeaderItem = (props) => {
-  const { fontFace, displayColors } = theme;
-  const { children, altColor } = props;
+  const { font, colors, mobileFont } = theme;
+  const { children, altColor, isMobile } = props;
   const styles = {
     headerItem: {
-      height: "22px",
+      height: '22px',
     },
     headerItemText: {
-      fontFamily: fontFace,
-      fontStyle: "normal",
-      fontWeight: "400",
-      fontSize: "19px",
-      lineHeight: "115%",
-      color: altColor ? displayColors.headerDate : displayColors.headerText,
+      fontFamily: font.display.fontFace,
+      fontStyle: 'normal',
+      fontWeight: '400',
+      fontSize: isMobile
+        ? font.display.header.fontSize
+        : mobileFont.display.header.fontSize,
+      lineHeight: '115%',
+      color: altColor ? colors.display.header.date : colors.display.text,
     },
   };
   return (
