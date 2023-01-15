@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import useDeviceDetect from './hooks/useDeviceDetect';
+import useDeviceDetect from '../hooks/useDeviceDetect';
 import PriceChart from './PriceChart';
 import Display from './display/Display';
 import DisplayHeader from './display/DisplayHeader';
@@ -107,15 +107,17 @@ const Widget = () => {
     isMobile !== null ? (
       <Layout isMobile={isMobile}>
         <PriceChart isMobile={isMobile}>
-          <Display>
-            <DisplayHeader>
+          <Display isMobile={isMobile}>
+            <DisplayHeader isMobile={isMobile}>
               <DisplayHeaderItem>ETH/USDT Price Chart</DisplayHeaderItem>
               <DisplayHeaderItem altColor>
-                {candleIsSelected ? getDate(candleIsSelected[0]) : null}
+                {candleIsSelected
+                  ? getDate(candleIsSelected[0], isMobile)
+                  : null}
               </DisplayHeaderItem>
             </DisplayHeader>
-            <ChartContainer>{candleSticks}</ChartContainer>
-            <DataColumns>
+            <ChartContainer isMobile={isMobile}>{candleSticks}</ChartContainer>
+            <DataColumns isMobile={isMobile}>
               <DataItem
                 header={'Open/Close'}
                 firstArg={
@@ -143,7 +145,7 @@ const Widget = () => {
                 }
               />
               <DataItem
-                header={'Change/Amplitude'}
+                header={isMobile ? 'Chage/Ampl' : 'Change/Amplitude'}
                 firstArg={
                   candleIsSelected
                     ? `${(

@@ -1,5 +1,5 @@
 const Display = (props) => {
-  const { children } = props;
+  const { children, isMobile } = props;
   const styles = {
     display: {
       display: 'flex',
@@ -7,8 +7,8 @@ const Display = (props) => {
       alignItems: 'flex-start',
       padding: '15px',
       gap: '10px',
-      widget: '510px',
-      height: ' 268px',
+      widget: isMobile ? '345px' : '510px',
+      height: isMobile ? '250px' : ' 268px',
     },
   };
 

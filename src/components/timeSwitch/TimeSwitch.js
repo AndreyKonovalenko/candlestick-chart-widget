@@ -1,5 +1,7 @@
+import theme from '../../theme/theme';
 const TimeSwitch = (props) => {
   const { children } = props;
+  const { switchColors } = theme;
   const styles = {
     timeSwitch: {
       display: 'flex',
@@ -7,7 +9,7 @@ const TimeSwitch = (props) => {
       alignItems: 'flex-start',
       padding: '0px 15px',
       height: '40px',
-      background: '#141414',
+      background: switchColors.background,
       borderRadius: '0px 0px 10px 10px',
       flex: 'none',
       order: '1',

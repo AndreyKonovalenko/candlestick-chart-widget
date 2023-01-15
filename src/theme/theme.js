@@ -15,9 +15,12 @@ const theme = {
   switchColors: {
     default: '#898989',
     selected: '#FFFFFF',
+    background: '#141414',
   },
   linkStyle: {
     fontFace: 'Raleway',
+    fontSize: '19px',
+    mobileFontSize: '16px',
     textColor: '#FFFFFF',
   },
 };

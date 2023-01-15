@@ -1,5 +1,5 @@
 const DataColumns = (props) => {
-  const { children } = props;
+  const { children, isMobile } = props;
   const styles = {
     dataColumns: {
       display: 'flex',
@@ -7,8 +7,8 @@ const DataColumns = (props) => {
       alignItems: 'flex-start',
       padding: '0px',
       gap: '20px',
-      width: '436px',
-      height: '81px',
+      width: isMobile ? '309px' : '436px',
+      height: isMobile ? '65px' : '81px',
       flex: 'none',
       order: '2',
       flexGrow: '0',

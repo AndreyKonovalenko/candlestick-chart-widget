@@ -1,4 +1,6 @@
+import theme from '../../theme/theme';
 const TimePickerHeader = () => {
+  const { switchColors } = theme;
   const styles = {
     timePickerHead: {
       display: 'flex',
@@ -6,7 +8,7 @@ const TimePickerHeader = () => {
       alignItems: 'flex-start',
       padding: '10px 5px 10px 0px',
       gap: '10px',
-      color: '#FFFFFF',
+      color: switchColors.default,
       cursor: 'pointer',
     },
     timePickerHeadText: {

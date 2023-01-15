@@ -1,4 +1,4 @@
-import { ReactComponent as Vector } from './assets/vetor.svg';
+import { ReactComponent as Vector } from '../assets/vetor.svg';
 import theme from '../theme/theme';
 const Layout = (props) => {
   const { isMobile, children } = props;
@@ -15,16 +15,17 @@ const Layout = (props) => {
     linkContainer: {
       position: 'absolute',
       right: '0px',
-      bottom: '0px',
+      bottom: isMobile ? '40px' : '0px',
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'flex-start',
       padding: '15px 10px',
+      gap: isMobile ? '2px' : '5px',
     },
     link: {
       display: 'flex',
       flexDirection: 'row',
-      alignItems: 'flex-start',
+      alignItems: 'center',
       gap: '2px',
       textDecoration: 'none',
     },
@@ -32,7 +33,7 @@ const Layout = (props) => {
       fontFamily: linkStyle.fontFace,
       fontStyle: 'normal',
       fontWeight: '600',
-      fontSize: '19px',
+      fontSize: isMobile ? linkStyle.mobileFontSize : linkStyle.fontSize,
       lineHeight: '130%',
       color: linkStyle.textColor,
     },
@@ -43,7 +44,7 @@ const Layout = (props) => {
       alignItems: 'center',
     },
     vector: {
-      height: '58%',
+      height: isMobile ? '40%' : '58%',
     },
   };
 
@@ -59,7 +60,7 @@ const Layout = (props) => {
         </a>
         <a style={styles.link} href='https://casetech.ru/candlestick-chart'>
           <span style={styles.text}>
-            Based on "KeйсТех" free candlestick chart case
+            Based on "KeйсТех" candlestick chart case
           </span>
           <div style={styles.vectorContainer}>
             <Vector style={styles.vector} />
