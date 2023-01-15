@@ -11,6 +11,7 @@ import DataColumns from './display/dataColumns/DataColumns';
 import DataItem from './display/dataColumns/DataItem';
 import ChartContainer from './display/chart/ChartContainer';
 import CandleStick from './display/chart/CandleStick';
+import Layout from './Layout';
 import { findMaxMin, getDate } from '../utils/utils';
 
 import axios from 'axios';
@@ -30,7 +31,7 @@ const Widget = () => {
     axios
       .get('/api/v3/klines', {
         params: {
-          symbol: 'BTCUSDT',
+          symbol: 'ETHUSDT',
           interval: data.interval,
           limit: data.isMobile ? '21' : '32',
         },
@@ -104,69 +105,71 @@ const Widget = () => {
 
   const widget =
     isMobile !== null ? (
-      <PriceChart isMobile={isMobile}>
-        <Display>
-          <DisplayHeader>
-            <DisplayHeaderItem>BTC/USDT Price Chart</DisplayHeaderItem>
-            <DisplayHeaderItem altColor>
-              {candleIsSelected ? getDate(candleIsSelected[0]) : null}
-            </DisplayHeaderItem>
-          </DisplayHeader>
-          <ChartContainer>{candleSticks}</ChartContainer>
-          <DataColumns>
-            <DataItem
-              header={'Open/Close'}
-              firstArg={
-                candleIsSelected
-                  ? parseFloat(candleIsSelected[1]).toFixed(2)
-                  : null
-              }
-              secondArg={
-                candleIsSelected
-                  ? parseFloat(candleIsSelected[4]).toFixed(2)
-                  : null
-              }
-            />
-            <DataItem
-              header={'High/Low'}
-              firstArg={
-                candleIsSelected
-                  ? parseFloat(candleIsSelected[2]).toFixed(2)
-                  : null
-              }
-              secondArg={
-                candleIsSelected
-                  ? parseFloat(candleIsSelected[3]).toFixed(2)
-                  : null
-              }
-            />
-            <DataItem
-              header={'Change/Amplitude'}
-              firstArg={
-                candleIsSelected
-                  ? `${(
-                      (parseFloat(candleIsSelected[1]) /
-                        parseFloat(candleIsSelected[4])) *
-                        100 -
-                      100
-                    ).toFixed(2)}%`
-                  : null
-              }
-              secondArg={
-                candleIsSelected
-                  ? `${(
-                      (parseFloat(candleIsSelected[2]) /
-                        parseFloat(candleIsSelected[3])) *
-                        100 -
-                      100
-                    ).toFixed(2)}%`
-                  : null
-              }
-            />
-          </DataColumns>
-        </Display>
-        <TimeSwitch>{data}</TimeSwitch>
-      </PriceChart>
+      <Layout isMobile={isMobile}>
+        <PriceChart isMobile={isMobile}>
+          <Display>
+            <DisplayHeader>
+              <DisplayHeaderItem>ETH/USDT Price Chart</DisplayHeaderItem>
+              <DisplayHeaderItem altColor>
+                {candleIsSelected ? getDate(candleIsSelected[0]) : null}
+              </DisplayHeaderItem>
+            </DisplayHeader>
+            <ChartContainer>{candleSticks}</ChartContainer>
+            <DataColumns>
+              <DataItem
+                header={'Open/Close'}
+                firstArg={
+                  candleIsSelected
+                    ? parseFloat(candleIsSelected[1]).toFixed(2)
+                    : null
+                }
+                secondArg={
+                  candleIsSelected
+                    ? parseFloat(candleIsSelected[4]).toFixed(2)
+                    : null
+                }
+              />
+              <DataItem
+                header={'High/Low'}
+                firstArg={
+                  candleIsSelected
+                    ? parseFloat(candleIsSelected[2]).toFixed(2)
+                    : null
+                }
+                secondArg={
+                  candleIsSelected
+                    ? parseFloat(candleIsSelected[3]).toFixed(2)
+                    : null
+                }
+              />
+              <DataItem
+                header={'Change/Amplitude'}
+                firstArg={
+                  candleIsSelected
+                    ? `${(
+                        (parseFloat(candleIsSelected[1]) /
+                          parseFloat(candleIsSelected[4])) *
+                          100 -
+                        100
+                      ).toFixed(2)}%`
+                    : null
+                }
+                secondArg={
+                  candleIsSelected
+                    ? `${(
+                        (parseFloat(candleIsSelected[2]) /
+                          parseFloat(candleIsSelected[3])) *
+                          100 -
+                        100
+                      ).toFixed(2)}%`
+                    : null
+                }
+              />
+            </DataColumns>
+          </Display>
+          <TimeSwitch>{data}</TimeSwitch>
+        </PriceChart>
+      </Layout>
     ) : null;
 
   return widget;
