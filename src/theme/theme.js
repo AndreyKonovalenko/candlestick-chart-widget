@@ -17,7 +17,7 @@ const theme = {
     selected: '#FFFFFF',
   },
   linkStyle: {
-    fontFace: 'Releway',
+    fontFace: 'Raleway',
     textColor: '#FFFFFF',
   },
 };
