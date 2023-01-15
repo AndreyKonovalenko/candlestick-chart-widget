@@ -14,7 +14,6 @@ const PriceChart = (props) => {
       top: '26px',
       background: 'rgba(0, 0, 0, 0.7)',
       borderRadius: '10px',
-      fontFamily: 'Roboto, sans-serif',
     },
   };
 
