@@ -4,7 +4,7 @@ import theme from "../../../theme/theme";
 const CandleStick = (props) => {
   const canvasRef = useRef(null);
   const { spread, open, high, low, close, onClick, isSelected } = props;
-  const { candleColors } = theme;
+  const { colors } = theme;
   const styles = {
     canvas: {
       cursor: "pointer",
@@ -25,11 +25,11 @@ const CandleStick = (props) => {
       ctx.strokeStyle =
         open >= close
           ? !isSelected
-            ? candleColors.bullish
-            : candleColors.bullishSelected
+            ? colors.display.chart.bullish
+            : colors.display.chart.bullishSelected
           : !isSelected
-          ? candleColors.bearish
-          : candleColors.bearishSelected;
+          ? colors.display.chart.bearish
+          : colors.display.chart.bearishSelected;
       ctx.lineWidth = 1;
       ctx.beginPath();
       ctx.moveTo(3.5, yLine0);
@@ -38,11 +38,11 @@ const CandleStick = (props) => {
       ctx.fillStyle =
         open >= close
           ? !isSelected
-            ? candleColors.bullish
-            : candleColors.bullishSelected
+            ? colors.display.chart.bullish
+            : colors.display.chart.bullishSelected
           : !isSelected
-          ? candleColors.bearish
-          : candleColors.bearishSelected;
+          ? colors.display.chart.bearish
+          : colors.display.chart.bearishSelected;
       ctx.fillRect(0, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
     };
 
@@ -50,10 +50,10 @@ const CandleStick = (props) => {
     const context = canvas.getContext("2d");
     draw(context, isSelected);
   }, [
-    candleColors.bearish,
-    candleColors.bearishSelected,
-    candleColors.bullish,
-    candleColors.bullishSelected,
+    colors.display.chart.bearish,
+    colors.display.chart.bearishSelected,
+    colors.display.chart.bullish,
+    colors.display.chart.bullishSelected,
     close,
     isSelected,
     open,
