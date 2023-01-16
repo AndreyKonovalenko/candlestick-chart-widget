@@ -2,7 +2,7 @@ import { ReactComponent as Vector } from '../assets/vetor.svg';
 import theme from '../theme/theme';
 const Layout = (props) => {
   const { isMobile, children } = props;
-  const { linkStyle } = theme;
+  const { colors, fonts, mobileFonts } = theme;
   const styles = {
     layout: {
       backgroundImage: `url(img/${isMobile ? 'Medium' : 'Large'}.jpg)`,
@@ -30,12 +30,12 @@ const Layout = (props) => {
       textDecoration: 'none',
     },
     text: {
-      fontFamily: linkStyle.fontFace,
+      fontFamily: fonts.secondary,
       fontStyle: 'normal',
       fontWeight: '600',
-      fontSize: isMobile ? linkStyle.mobileFontSize : linkStyle.fontSize,
+      fontSize: isMobile ? mobileFonts.link : fonts.link,
       lineHeight: '130%',
-      color: linkStyle.textColor,
+      color: colors.link,
     },
     vectorContainer: {
       display: 'flex',

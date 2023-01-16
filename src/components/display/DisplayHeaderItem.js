@@ -1,20 +1,18 @@
 import theme from '../../theme/theme';
 const DisplayHeaderItem = (props) => {
-  const { font, colors, mobileFont } = theme;
+  const { fonts, colors, mobileFonts } = theme;
   const { children, altColor, isMobile } = props;
   const styles = {
     headerItem: {
       height: '22px',
     },
     headerItemText: {
-      fontFamily: font.display.fontFace,
+      fontFamily: fonts.main,
       fontStyle: 'normal',
       fontWeight: '400',
-      fontSize: isMobile
-        ? font.display.header.fontSize
-        : mobileFont.display.header.fontSize,
+      fontSize: isMobile ? mobileFonts.display.header : fonts.display.header,
       lineHeight: '115%',
-      color: altColor ? colors.display.header.date : colors.display.text,
+      color: altColor ? colors.display.header.date : colors.display.header.text,
     },
   };
   return (

@@ -1,6 +1,7 @@
 import theme from '../../theme/theme';
-const TimePickerHeader = () => {
-  const { switchColors } = theme;
+const TimePickerHeader = (props) => {
+  const { isMobile } = props;
+  const { colors, fonts, mobileFonts } = theme;
   const styles = {
     timePickerHead: {
       display: 'flex',
@@ -8,14 +9,14 @@ const TimePickerHeader = () => {
       alignItems: 'flex-start',
       padding: '10px 5px 10px 0px',
       gap: '10px',
-      color: switchColors.default,
+      color: colors.switch.selected,
       cursor: 'pointer',
     },
     timePickerHeadText: {
-      fontFamily: 'Roboto',
+      fontFamily: fonts.main,
       fontStyle: 'normal',
       fontWeight: '400',
-      fontSize: '17px',
+      fontSize: isMobile ? mobileFonts.switch : fonts.switch,
       inlineHeight: '120%',
     },
   };
