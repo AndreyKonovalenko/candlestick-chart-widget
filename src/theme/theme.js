@@ -13,46 +13,28 @@ const theme = {
     switch: { default: '#898989', selected: '#FFFFFF', background: '#141414' },
     link: { text: '#FFFFFF' },
   },
-  font: {
+  fonts: {
     display: {
       fontFace: 'Roboto',
-      header: {
-        fontSize: '19px',
-      },
-      data: {
-        header: {
-          fontSize: '18px',
-        },
-        value: {
-          fontSize: '30px',
-        },
-      },
+      header: '19px',
+      data: '18px',
+      value: '30px',
+      switch: '17px',
     },
-    switch: {
-      fontSize: '17px',
-    },
-    link: {
+    links: {
       fontFace: 'Raleway',
-      fontSize: '19px',
+      link: '19px',
     },
   },
-  mobileFont: {
+  mobileFonts: {
     display: {
-      header: {
-        fontSize: '17px',
-      },
-      data: {
-        header: {
-          fontSize: '15px',
-        },
-        value: {
-          fontSize: '24px',
-        },
-      },
+      header: '17px',
+      data: '15px',
+      value: '24px',
+      switch: '17px',
     },
-    switch: { fontSize: '17px' },
-    link: {
-      fontSize: '16px',
+    links: {
+      link: '16px',
     },
   },
 };
