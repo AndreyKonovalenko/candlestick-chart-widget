@@ -1,11 +1,11 @@
 import theme from "../theme/theme";
 
-const culcCandleVerticalCoordinate = (spread, element) => {
+const culcCandleVerticalCoordinate = (spread, element, canvasHeight) => {
   const open = element[1];
   const high = element[2];
   const low = element[3];
   const close = element[4];
-  const step = spread.spread / 115; // price value in one px of canvas height.
+  const step = spread.spread / canvasHeight;
   const yLine0 = Math.round((spread.max - high) / step);
   const yLine1 = Math.round((spread.max - low) / step);
   const yRect0 = Math.round(
@@ -17,35 +17,37 @@ const culcCandleVerticalCoordinate = (spread, element) => {
   return { yLine0, yLine1, yRect0, rectHeight, open, close };
 };
 
-const drawSingleCandle = (ctx, position, offset) => {
-  const { colors } = theme;
+const drawSingleCandle = (ctx, position, offset, colors) => {
   const { yLine0, yLine1, yRect0, rectHeight, open, close } = position;
   ctx.strokeStyle =
     open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
   ctx.lineWidth = 1;
   ctx.beginPath();
-  ctx.moveTo(offset + 3 + 3.5, yLine0);
-  ctx.lineTo(offset + 3 + 3.5, yLine1);
+  ctx.moveTo(offset + 3.5, yLine0);
+  ctx.lineTo(offset + 3.5, yLine1);
   ctx.stroke();
   ctx.fillStyle =
-    open >= close
-      ? !colors.display.chart.bullish
-      : colors.display.chart.bearish;
+    open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
   ctx.fillRect(offset, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
 };
 
-const draw = (ctx, items, spread) => {
+const draw = (ctx, items, spread, colors) => {
   let offset = 4;
   for (const element of items) {
-    const position = culcCandleVerticalCoordinate(spread, element);
-    drawSingleCandle(ctx, position, offset);
-    offset = offset + 11;
+    const position = culcCandleVerticalCoordinate(
+      spread,
+      element,
+      ctx.canvas.height
+    );
+    drawSingleCandle(ctx, position, offset, colors);
+    offset = offset + 15;
   }
 };
 
 export const drawChart = (spread, items, id) => {
+  const { colors } = theme;
   const canvas = document.getElementById(id);
   const context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
-  return draw(context, items, spread);
+  return draw(context, items, spread, colors);
 };
