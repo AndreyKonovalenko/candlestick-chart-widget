@@ -1,10 +1,10 @@
-import theme from '../theme/theme';
-export const drawChart = (spread, items, id) => {
-  const { colors } = theme;
-  const open = items[1];
-  const high = items[2];
-  const low = items[3];
-  const close = items[4];
+import theme from "../theme/theme";
+
+const culcCandleVerticalCoordinate = (spread, element) => {
+  const open = element[1];
+  const high = element[2];
+  const low = element[3];
+  const close = element[4];
   const step = spread.spread / 115; // price value in one px of canvas height.
   const yLine0 = Math.round((spread.max - high) / step);
   const yLine1 = Math.round((spread.max - low) / step);
@@ -14,26 +14,38 @@ export const drawChart = (spread, items, id) => {
   const rectHeight = Math.round(
     open >= close ? (open - close) / step : (close - open) / step
   );
+  return { yLine0, yLine1, yRect0, rectHeight, open, close };
+};
 
-  const drawCandle = (ctx) => {
-    ctx.strokeStyle =
-      open >= close
-        ? colors.display.chart.bullish
-        : colors.display.chart.bearish;
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(3.5, yLine0);
-    ctx.lineTo(3.5, yLine1);
-    ctx.stroke();
-    ctx.fillStyle =
-      open >= close
-        ? !colors.display.chart.bullish
-        : colors.display.chart.bearish;
-    ctx.fillRect(0, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
-  };
-  // neeed add offset and position calculation
-  const canvas = window.getActiveElementById(id);
-  const context = canvas.getContext('2d');
+const drawSingleCandle = (ctx, position, offset) => {
+  const { colors } = theme;
+  const { yLine0, yLine1, yRect0, rectHeight, open, close } = position;
+  ctx.strokeStyle =
+    open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(offset + 3 + 3.5, yLine0);
+  ctx.lineTo(offset + 3 + 3.5, yLine1);
+  ctx.stroke();
+  ctx.fillStyle =
+    open >= close
+      ? !colors.display.chart.bullish
+      : colors.display.chart.bearish;
+  ctx.fillRect(offset, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
+};
 
-  return drawCandle(context);
+const draw = (ctx, items, spread) => {
+  let offset = 4;
+  for (const element of items) {
+    const position = culcCandleVerticalCoordinate(spread, element);
+    drawSingleCandle(ctx, position, offset);
+    offset = offset + 11;
+  }
+};
+
+export const drawChart = (spread, items, id) => {
+  const canvas = document.getElementById(id);
+  const context = canvas.getContext("2d");
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  return draw(context, items, spread);
 };
