@@ -1,5 +1,3 @@
-import theme from '../theme/theme';
-
 const culcCandleVerticalCoordinate = (spread, element, canvasHeight) => {
   const open = element[1];
   const high = element[2];
@@ -20,19 +18,20 @@ const culcCandleVerticalCoordinate = (spread, element, canvasHeight) => {
 const drawSingleCandle = (ctx, position, offset, colors) => {
   const { yLine0, yLine1, yRect0, rectHeight, open, close } = position;
   const candle = new Path2D();
+  ctx.strokeStyle =
+    open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
+  ctx.lineWidth = 1;
+  candle.moveTo(offset + 3.5, yLine0);
+  candle.lineTo(offset + 3.5, yLine1);
+  ctx.stroke(candle);
   candle.rect(offset, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
-  // ctx.strokeStyle =
-  //   open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
-  // ctx.lineWidth = 1;
-  // ctx.beginPath();
-  // // ctx.moveTo(offset + 3.5, yLine0);
-  // // ctx.lineTo(offset + 3.5, yLine1);
-  // ctx.stroke();
   ctx.fillStyle =
     open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
   ctx.fill(candle);
-  return candle;
-  // ctx.fillRect(offset, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
+  return {
+    path2dObject: candle,
+    type: open >= close ? 'bullish' : 'bearish',
+  };
 };
 
 const draw = (ctx, items, spread, colors) => {
@@ -50,11 +49,9 @@ const draw = (ctx, items, spread, colors) => {
   return candles;
 };
 
-export const drawChart = (spread, items, id) => {
-  const { colors } = theme;
+export const drawChart = (spread, items, id, colors) => {
   const canvas = document.getElementById(id);
   const context = canvas.getContext('2d');
   context.clearRect(0, 0, canvas.width, canvas.height);
-
   return draw(context, items, spread, colors);
 };

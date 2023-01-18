@@ -25,7 +25,7 @@ const Widget = () => {
   const { colors } = theme;
   const intervals = ['15m', '1h', '4h', '1d', '1w'];
   const isMobile = useDeviceDetect();
-  const [candlesList, setCandlesList] = useState(null);
+  const [candleList, setCandleList] = useState(null);
   const [cursorStyle, setCursorStyle] = useState(false);
   const [activePicker, setActivePicker] = useState('15m');
   const [candleIsSelected, setCandleIsSelected] = useState(null);
@@ -58,7 +58,7 @@ const Widget = () => {
   };
 
   const onSwitchClickHandler = (data) => {
-    setCandlesList(null);
+    setCandleList(null);
     fetchData(data);
     setActivePicker(data.interval);
   };
@@ -67,23 +67,35 @@ const Widget = () => {
     setCandleIsSelected(element);
   };
 
-  const onCanvasClickHandler = (candlesList, event) => {
+  const onCanvasClickHandler = (candleList, event) => {
     const context = document.getElementById('myCanvas').getContext('2d');
-    if (candlesList !== null) {
-      for (const element of candlesList) {
+    if (candleList !== null) {
+      for (const element of candleList) {
         if (
           context.isPointInPath(
-            element,
+            element.path2dObject,
             event.nativeEvent.offsetX,
             event.nativeEvent.offsetY
           )
         ) {
           setCursorStyle(true);
-          setCandleIsSelected(candleData[candlesList.indexOf(element)]);
-          context.fillStyle = colors.display.chart.bullishSelected;
-          context.fill(element);
+          setCandleIsSelected(candleData[candleList.indexOf(element)]);
+          if (element.type === 'bullish') {
+            context.fillStyle = colors.display.chart.bullishSelected;
+          }
+          if (element.type === 'bearish') {
+            context.fillStyle = colors.display.chart.bearishSelected;
+          }
+          context.fill(element.path2dObject);
           return;
         } else {
+          if (element.type === 'bullish') {
+            context.fillStyle = colors.display.chart.bullish;
+          }
+          if (element.type === 'bearish') {
+            context.fillStyle = colors.display.chart.bearish;
+          }
+          context.fill(element.path2dObject);
           setCursorStyle(false);
         }
       }
@@ -103,22 +115,6 @@ const Widget = () => {
 
   data.unshift(<TimePickerHeader key={uniqid()} />);
 
-  // const candleSticks =
-  //   spread !== null
-  //     ? candleData.map((element) => (
-  //         <CandleStick
-  //           key={uniqid()}
-  //           spread={spread}
-  //           open={parseFloat(element[1])}
-  //           high={parseFloat(element[2])}
-  //           low={parseFloat(element[3])}
-  //           close={parseFloat(element[4])}
-  //           isSelected={element === candleIsSelected ? true : false}
-  //           onClick={(event) => onCandleSelectHandler(element, event)}
-  //         ></CandleStick>
-  //       ))
-  //     : null;
-
   useEffect(() => {
     console.log('re-render main!');
     console.log('isMobile: ', isMobile);
@@ -131,17 +127,10 @@ const Widget = () => {
     // if (candleData && candleIsSelected === null) {
     //   setCandleIsSelected(candleData[candleData.length - 1]);
     // }
-    if (candleData !== null && spread !== null && candlesList === null) {
-      setCandlesList(drawChart(spread, candleData, 'myCanvas'));
+    if (candleData !== null && spread !== null && candleList === null) {
+      setCandleList(drawChart(spread, candleData, 'myCanvas', colors));
     }
-  }, [
-    candleData,
-    candleIsSelected,
-    candlesList,
-    cursorStyle,
-    isMobile,
-    spread,
-  ]);
+  }, [candleData, candleIsSelected, candleList, cursorStyle, isMobile, spread]);
 
   const widget =
     isMobile !== null ? (
@@ -166,7 +155,7 @@ const Widget = () => {
               width={isMobile ? '315' : '480'}
               height='115'
               onMouseMoveCapture={(event) =>
-                onCanvasClickHandler(candlesList, event)
+                onCanvasClickHandler(candleList, event)
               }></canvas>
             <DataColumns isMobile={isMobile}>
               <DataItem
