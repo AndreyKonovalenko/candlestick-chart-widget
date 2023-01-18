@@ -73,7 +73,12 @@ const Widget = () => {
       for (const element of candleList) {
         if (
           context.isPointInPath(
-            element.path2dObject,
+            element.candle.rect,
+            event.nativeEvent.offsetX,
+            event.nativeEvent.offsetY
+          ) ||
+          context.isPointInStroke(
+            element.candle.line,
             event.nativeEvent.offsetX,
             event.nativeEvent.offsetY
           )
@@ -82,20 +87,26 @@ const Widget = () => {
           setCandleIsSelected(candleData[candleList.indexOf(element)]);
           if (element.type === 'bullish') {
             context.fillStyle = colors.display.chart.bullishSelected;
+            context.strokeStyle = colors.display.chart.bullishSelected;
           }
           if (element.type === 'bearish') {
             context.fillStyle = colors.display.chart.bearishSelected;
+            context.strokeStyle = colors.display.chart.bearishSelected;
           }
-          context.fill(element.path2dObject);
+          context.fill(element.candle.rect);
+          context.stroke(element.candle.line);
           return;
         } else {
           if (element.type === 'bullish') {
             context.fillStyle = colors.display.chart.bullish;
+            context.strokeStyle = colors.display.chart.bullish;
           }
           if (element.type === 'bearish') {
             context.fillStyle = colors.display.chart.bearish;
+            context.strokeStyle = colors.display.chart.bearish;
           }
-          context.fill(element.path2dObject);
+          context.fill(element.candle.rect);
+          context.stroke(element.candle.line);
           setCursorStyle(false);
         }
       }
@@ -130,7 +141,15 @@ const Widget = () => {
     if (candleData !== null && spread !== null && candleList === null) {
       setCandleList(drawChart(spread, candleData, 'myCanvas', colors));
     }
-  }, [candleData, candleIsSelected, candleList, cursorStyle, isMobile, spread]);
+  }, [
+    candleData,
+    candleIsSelected,
+    candleList,
+    colors,
+    cursorStyle,
+    isMobile,
+    spread,
+  ]);
 
   const widget =
     isMobile !== null ? (

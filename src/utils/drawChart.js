@@ -17,19 +17,20 @@ const culcCandleVerticalCoordinate = (spread, element, canvasHeight) => {
 
 const drawSingleCandle = (ctx, position, offset, colors) => {
   const { yLine0, yLine1, yRect0, rectHeight, open, close } = position;
-  const candle = new Path2D();
+  const line = new Path2D();
+  const rect = new Path2D();
   ctx.strokeStyle =
     open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
   ctx.lineWidth = 1;
-  candle.moveTo(offset + 3.5, yLine0);
-  candle.lineTo(offset + 3.5, yLine1);
-  ctx.stroke(candle);
-  candle.rect(offset, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
+  line.moveTo(offset + 3.5, yLine0);
+  line.lineTo(offset + 3.5, yLine1);
+  ctx.stroke(line);
+  rect.rect(offset, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
   ctx.fillStyle =
     open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
-  ctx.fill(candle);
+  ctx.fill(rect);
   return {
-    path2dObject: candle,
+    candle: { rect: rect, line: line },
     type: open >= close ? 'bullish' : 'bearish',
   };
 };
