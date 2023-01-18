@@ -9,8 +9,7 @@ import TimePicker from './timeSwitch/TimePicker';
 import TimePickerHeader from './timeSwitch/TimePickerHeader';
 import DataColumns from './display/dataColumns/DataColumns';
 import DataItem from './display/dataColumns/DataItem';
-//import ChartContainer from "./display/chart/ChartContainer";
-import CandleStick from './display/chart/CandleStick';
+import ChartContainer from './display/chart/ChartContainer';
 import Layout from './Layout';
 import { findMaxMin, getDate } from '../utils/utils';
 import { drawChart } from '../utils/drawChart';
@@ -166,16 +165,14 @@ const Widget = () => {
                   : null}
               </DisplayHeaderItem>
             </DisplayHeader>
-            {/* <ChartContainer isMobile={isMobile}>{candleSticks}</ChartContainer> */}
-
-            <canvas
+            <ChartContainer
+              cursorStyle={cursorStyle}
+              isMobile={isMobile}
               id={'myCanvas'}
-              style={{ cursor: !cursorStyle ? 'default' : 'pointer' }}
-              width={isMobile ? '315' : '480'}
-              height='115'
               onMouseMoveCapture={(event) =>
                 onCanvasClickHandler(candleList, event)
-              }></canvas>
+              }
+            />
             <DataColumns isMobile={isMobile}>
               <DataItem
                 isMobile={isMobile}

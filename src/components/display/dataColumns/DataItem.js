@@ -6,14 +6,15 @@ const DataItem = (props) => {
     dataItem: {
       display: 'flex',
       flexDirection: 'column',
-      alignItems: 'flex-start',
+      alignItems: header === 'Chage/Ampl' ? 'flex-end' : 'flex-start',
       padding: '0px',
-    },
-    dataItemAlt: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-end',
-      padding: '0px',
+      width: isMobile
+        ? header === 'Chage/Ampl'
+          ? '91px'
+          : '99px'
+        : header === 'Change/Aplitude'
+        ? '148px'
+        : '124px',
     },
     valueContainer: {
       display: 'flex',
@@ -39,7 +40,7 @@ const DataItem = (props) => {
     },
   };
   return (
-    <div style={header === 'Chage/Ampl' ? styles.dataItemAlt : styles.dataItem}>
+    <div style={styles.dataItem}>
       <span style={styles.headerText}>{header}</span>
       <div style={styles.valueContainer}>
         <span style={styles.valuesText}>{firstArg}</span>

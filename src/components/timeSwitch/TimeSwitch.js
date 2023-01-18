@@ -11,10 +11,7 @@ const TimeSwitch = (props) => {
       height: '40px',
       background: colors.switch.background,
       borderRadius: '0px 0px 10px 10px',
-      flex: 'none',
-      order: '1',
       alignSelf: 'stretch',
-      flexGrow: '0',
     },
   };
 
