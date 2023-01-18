@@ -1,4 +1,4 @@
-import theme from "../theme/theme";
+import theme from '../theme/theme';
 
 const culcCandleVerticalCoordinate = (spread, element, canvasHeight) => {
   const open = element[1];
@@ -19,19 +19,24 @@ const culcCandleVerticalCoordinate = (spread, element, canvasHeight) => {
 
 const drawSingleCandle = (ctx, position, offset, colors) => {
   const { yLine0, yLine1, yRect0, rectHeight, open, close } = position;
-  ctx.strokeStyle =
-    open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
-  ctx.lineWidth = 1;
-  ctx.beginPath();
-  ctx.moveTo(offset + 3.5, yLine0);
-  ctx.lineTo(offset + 3.5, yLine1);
-  ctx.stroke();
+  const candle = new Path2D();
+  candle.rect(offset, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
+  // ctx.strokeStyle =
+  //   open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
+  // ctx.lineWidth = 1;
+  // ctx.beginPath();
+  // // ctx.moveTo(offset + 3.5, yLine0);
+  // // ctx.lineTo(offset + 3.5, yLine1);
+  // ctx.stroke();
   ctx.fillStyle =
     open >= close ? colors.display.chart.bullish : colors.display.chart.bearish;
-  ctx.fillRect(offset, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
+  ctx.fill(candle);
+  return candle;
+  // ctx.fillRect(offset, yRect0, 7, rectHeight > 0 ? rectHeight : 1);
 };
 
 const draw = (ctx, items, spread, colors) => {
+  const candles = [];
   let offset = 4;
   for (const element of items) {
     const position = culcCandleVerticalCoordinate(
@@ -39,15 +44,17 @@ const draw = (ctx, items, spread, colors) => {
       element,
       ctx.canvas.height
     );
-    drawSingleCandle(ctx, position, offset, colors);
+    candles.push(drawSingleCandle(ctx, position, offset, colors));
     offset = offset + 15;
   }
+  return candles;
 };
 
 export const drawChart = (spread, items, id) => {
   const { colors } = theme;
   const canvas = document.getElementById(id);
-  const context = canvas.getContext("2d");
+  const context = canvas.getContext('2d');
   context.clearRect(0, 0, canvas.width, canvas.height);
+
   return draw(context, items, spread, colors);
 };
