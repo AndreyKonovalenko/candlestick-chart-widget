@@ -134,9 +134,12 @@ const Widget = () => {
       console.log(isMobile);
       fetchData({ interval: '15m', isMobile: isMobile });
     }
-    // if (candleData && candleIsSelected === null) {
-    //   setCandleIsSelected(candleData[candleData.length - 1]);
-    // }
+    if (candleData && candleIsSelected === null && candleList !== null) {
+      const context = document.getElementById('myCanvas').getContext('2d');
+      context.fillStyle = 'orange';
+      setCandleIsSelected(candleData[candleData.length - 1]);
+      context.fill(candleList[candleList.length - 1].candle.rect);
+    }
     if (candleData !== null && spread !== null && candleList === null) {
       setCandleList(drawChart(spread, candleData, 'myCanvas', colors));
     }
