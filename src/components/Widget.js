@@ -1,32 +1,38 @@
-import { useState, useEffect } from 'react';
-import useDeviceDetect from '../hooks/useDeviceDetect';
-import PriceChart from './PriceChart';
-import Display from './display/Display';
-import DisplayHeader from './display/DisplayHeader';
-import DisplayHeaderItem from './display/DisplayHeaderItem';
-import TimeSwitch from './timeSwitch/TimeSwitch';
-import TimePicker from './timeSwitch/TimePicker';
-import TimePickerHeader from './timeSwitch/TimePickerHeader';
-import DataColumns from './display/dataColumns/DataColumns';
-import DataItem from './display/dataColumns/DataItem';
-import ChartContainer from './display/chart/ChartContainer';
-import Layout from './Layout';
-import { findMaxMin, getDate } from '../utils/utils';
-import { drawChart } from '../utils/drawChart';
+import { useState, useEffect } from "react";
+import useDeviceDetect from "../hooks/useDeviceDetect";
+import PriceChart from "./PriceChart";
+import Display from "./display/Display";
+import DisplayHeader from "./display/DisplayHeader";
+import DisplayHeaderItem from "./display/DisplayHeaderItem";
+import TimeSwitch from "./timeSwitch/TimeSwitch";
+import TimePicker from "./timeSwitch/TimePicker";
+import TimePickerHeader from "./timeSwitch/TimePickerHeader";
+import DataColumns from "./display/dataColumns/DataColumns";
+import DataItem from "./display/dataColumns/DataItem";
+import ChartContainer from "./display/chart/ChartContainer";
+import Layout from "./Layout";
+import {
+  findMaxMin,
+  getDate,
+  setSelectedColor,
+  setDefaultColor,
+} from "../utils/utils";
+import { drawChart } from "../utils/drawChart";
 
-import axios from 'axios';
-import uniqid from 'uniqid';
-import theme from '../theme/theme';
+import axios from "axios";
+import uniqid from "uniqid";
+import theme from "../theme/theme";
 
-axios.defaults.baseURL = 'https://api.binance.com/';
+axios.defaults.baseURL = "https://api.binance.com/";
 
 const Widget = () => {
+  const canvasId = "candlestick-chart";
   const { colors } = theme;
-  const intervals = ['15m', '1h', '4h', '1d', '1w'];
+  const intervals = ["15m", "1h", "4h", "1d", "1w"];
   const isMobile = useDeviceDetect();
   const [candleList, setCandleList] = useState(null);
   const [cursorStyle, setCursorStyle] = useState(false);
-  const [activePicker, setActivePicker] = useState('15m');
+  const [activePicker, setActivePicker] = useState("15m");
   const [candleIsSelected, setCandleIsSelected] = useState(null);
   const [candleData, setCandleData] = useState(null);
   const [spread, setSpread] = useState(null);
@@ -34,11 +40,11 @@ const Widget = () => {
   //axios
   const fetchData = (data) => {
     axios
-      .get('/api/v3/klines', {
+      .get("/api/v3/klines", {
         params: {
-          symbol: 'ETHUSDT',
+          symbol: "ETHUSDT",
           interval: data.interval,
-          limit: data.isMobile ? '21' : '32',
+          limit: data.isMobile ? "21" : "32",
         },
       })
       .then((response) => {
@@ -52,7 +58,7 @@ const Widget = () => {
       })
       .finally(() => {
         setCandleIsSelected(null);
-        console.log('loading complited!');
+        console.log("loading complited!");
       });
   };
 
@@ -67,7 +73,7 @@ const Widget = () => {
   };
 
   const onCanvasClickHandler = (candleList, event) => {
-    const context = document.getElementById('myCanvas').getContext('2d');
+    const context = document.getElementById(canvasId).getContext("2d");
     if (candleList !== null) {
       for (const element of candleList) {
         if (
@@ -84,28 +90,10 @@ const Widget = () => {
         ) {
           setCursorStyle(true);
           setCandleIsSelected(candleData[candleList.indexOf(element)]);
-          if (element.type === 'bullish') {
-            context.fillStyle = colors.display.chart.bullishSelected;
-            context.strokeStyle = colors.display.chart.bullishSelected;
-          }
-          if (element.type === 'bearish') {
-            context.fillStyle = colors.display.chart.bearishSelected;
-            context.strokeStyle = colors.display.chart.bearishSelected;
-          }
-          context.fill(element.candle.rect);
-          context.stroke(element.candle.line);
+          setSelectedColor(element, context, colors);
           return;
         } else {
-          if (element.type === 'bullish') {
-            context.fillStyle = colors.display.chart.bullish;
-            context.strokeStyle = colors.display.chart.bullish;
-          }
-          if (element.type === 'bearish') {
-            context.fillStyle = colors.display.chart.bearish;
-            context.strokeStyle = colors.display.chart.bearish;
-          }
-          context.fill(element.candle.rect);
-          context.stroke(element.candle.line);
+          setDefaultColor(element, context, colors);
           setCursorStyle(false);
         }
       }
@@ -118,7 +106,8 @@ const Widget = () => {
       isActive={element === activePicker ? true : false}
       onClick={(event) =>
         onSwitchClickHandler({ interval: element, isMobile: isMobile }, event)
-      }>
+      }
+    >
       {index === 0 ? element : element.toUpperCase()}
     </TimePicker>
   ));
@@ -126,22 +115,17 @@ const Widget = () => {
   data.unshift(<TimePickerHeader key={uniqid()} />);
 
   useEffect(() => {
-    console.log('re-render main!');
-    console.log('isMobile: ', isMobile);
-    console.log(cursorStyle);
-
     if (candleData === null && isMobile !== null) {
       console.log(isMobile);
-      fetchData({ interval: '15m', isMobile: isMobile });
+      fetchData({ interval: "15m", isMobile: isMobile });
     }
     if (candleData && candleIsSelected === null && candleList !== null) {
-      const context = document.getElementById('myCanvas').getContext('2d');
-      context.fillStyle = 'orange';
+      const context = document.getElementById(canvasId).getContext("2d");
       setCandleIsSelected(candleData[candleData.length - 1]);
-      context.fill(candleList[candleList.length - 1].candle.rect);
+      setSelectedColor(candleList[candleList.length - 1], context, colors);
     }
     if (candleData !== null && spread !== null && candleList === null) {
-      setCandleList(drawChart(spread, candleData, 'myCanvas', colors));
+      setCandleList(drawChart(spread, candleData, canvasId, colors));
     }
   }, [
     candleData,
@@ -171,7 +155,7 @@ const Widget = () => {
             <ChartContainer
               cursorStyle={cursorStyle}
               isMobile={isMobile}
-              id={'myCanvas'}
+              id={canvasId}
               onMouseMoveCapture={(event) =>
                 onCanvasClickHandler(candleList, event)
               }
@@ -179,7 +163,7 @@ const Widget = () => {
             <DataColumns isMobile={isMobile}>
               <DataItem
                 isMobile={isMobile}
-                header={'Open/Close'}
+                header={"Open/Close"}
                 firstArg={
                   candleIsSelected
                     ? parseFloat(candleIsSelected[1]).toFixed(2)
@@ -193,7 +177,7 @@ const Widget = () => {
               />
               <DataItem
                 isMobile={isMobile}
-                header={'High/Low'}
+                header={"High/Low"}
                 firstArg={
                   candleIsSelected
                     ? parseFloat(candleIsSelected[2]).toFixed(2)
@@ -207,7 +191,7 @@ const Widget = () => {
               />
               <DataItem
                 isMobile={isMobile}
-                header={isMobile ? 'Chage/Ampl' : 'Change/Amplitude'}
+                header={isMobile ? "Chage/Ampl" : "Change/Amplitude"}
                 firstArg={
                   candleIsSelected
                     ? `${(

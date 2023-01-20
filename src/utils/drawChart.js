@@ -31,7 +31,7 @@ const drawSingleCandle = (ctx, position, offset, colors) => {
   ctx.fill(rect);
   return {
     candle: { rect: rect, line: line },
-    type: open >= close ? 'bullish' : 'bearish',
+    type: open >= close ? "bullish" : "bearish",
   };
 };
 
@@ -52,7 +52,7 @@ const draw = (ctx, items, spread, colors) => {
 
 export const drawChart = (spread, items, id, colors) => {
   const canvas = document.getElementById(id);
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
   return draw(context, items, spread, colors);
 };
