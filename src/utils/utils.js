@@ -57,44 +57,33 @@ export const getDate = (date, isMobile) => {
   return `${day} ${month} ${time}`;
 };
 
-export const setDate = (candleIndex, candleData, isMobile) => {
-  return candleIndex ? getDate(candleData[candleIndex][0], isMobile) : null;
-};
+export const setDate = (candleIndex, candleData, isMobile) =>
+  getDate(candleData[candleIndex][0], isMobile);
 
-export const setOpen = (candleIndex, candleData) => {
-  return candleIndex ? parseFloat(candleData[candleIndex][1]).toFixed(2) : null;
-};
+export const setOpen = (candleIndex, candleData) =>
+  parseFloat(candleData[candleIndex][1]).toFixed(2);
 
-export const setClose = (candleIndex, candleData) => {
-  return candleIndex ? parseFloat(candleData[candleIndex][4]).toFixed(2) : null;
-};
+export const setClose = (candleIndex, candleData) =>
+  parseFloat(candleData[candleIndex][4]).toFixed(2);
 
-export const setHigh = (candleIndex, candleData) => {
-  return candleIndex ? parseFloat(candleData[candleIndex][2]).toFixed(2) : null;
-};
+export const setHigh = (candleIndex, candleData) =>
+  parseFloat(candleData[candleIndex][2]).toFixed(2);
 
-export const setLow = (candleIndex, candleData) => {
-  return candleIndex ? parseFloat(candleData[candleIndex][3]).toFixed(2) : null;
-};
+export const setLow = (candleIndex, candleData) =>
+  parseFloat(candleData[candleIndex][3]).toFixed(2);
 
-export const setChange = (candleIndex, candleData) => {
-  return candleIndex
-    ? `${(
-        (parseFloat(candleData[candleIndex][1]) /
-          parseFloat(candleData[candleIndex][4])) *
-          100 -
-        100
-      ).toFixed(2)}%`
-    : null;
-};
+export const setChange = (candleIndex, candleData) =>
+  `${(
+    (parseFloat(candleData[candleIndex][1]) /
+      parseFloat(candleData[candleIndex][4])) *
+      100 -
+    100
+  ).toFixed(2)}%`;
 
-export const setAmplitude = (candleIndex, candleData) => {
-  return candleIndex
-    ? `${(
-        (parseFloat(candleData[candleIndex][2]) /
-          parseFloat(candleData[candleIndex][3])) *
-          100 -
-        100
-      ).toFixed(2)}%`
-    : null;
-};
+export const setAmplitude = (candleIndex, candleData) =>
+  `${(
+    (parseFloat(candleData[candleIndex][2]) /
+      parseFloat(candleData[candleIndex][3])) *
+      100 -
+    100
+  ).toFixed(2)}%`;

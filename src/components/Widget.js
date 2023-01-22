@@ -36,7 +36,6 @@ import theme from '../theme/theme';
 
 axios.defaults.baseURL = 'https://api.binance.com/';
 const Widget = () => {
-  let tradeDate, openPrice, closePrice, highPrice, lowPrice, change, amplitude;
   const canvasId = 'candlestick-chart';
   const { colors } = theme;
   const isMobile = useDeviceDetect();
@@ -65,6 +64,7 @@ const Widget = () => {
     if (candleList2D !== null) {
       for (const element of candleList2D) {
         if (pointInPath(element, context, event)) {
+          console.log(candleList2D.indexOf(element));
           setCandleIndex(candleList2D.indexOf(element));
           return;
         }
@@ -106,7 +106,7 @@ const Widget = () => {
   switchBar.unshift(<TimePickerHeader key={uniqid()} />);
 
   useEffect(() => {
-    console.log(candleData);
+    console.log(candleIndex);
     if (candleData === null) {
       fetchData(
         { interval: activePicker, isMobile: isMobile },
@@ -141,67 +141,53 @@ const Widget = () => {
     spread,
   ]);
 
-  if (
-    candleData !== null &&
-    candleData !== undefined &&
-    spread !== null &&
-    candleIndex
-  ) {
-    tradeDate = setDate(candleIndex, candleData, isMobile);
-    openPrice = setOpen(candleIndex, candleData);
-    closePrice = setClose(candleIndex, candleData);
-    highPrice = setHigh(candleIndex, candleData);
-    lowPrice = setLow(candleIndex, candleData);
-    change = setChange(candleIndex, candleData);
-    amplitude = setAmplitude(candleIndex, candleData);
-  }
-
-  const widget = (
-    <Layout isMobile={isMobile}>
-      <PriceChart isMobile={isMobile}>
-        <Display isMobile={isMobile}>
-          <DisplayHeader isMobile={isMobile}>
-            <DisplayHeaderItem isMobile={isMobile}>
-              ETH/USDT Price Chart
-            </DisplayHeaderItem>
-            <DisplayHeaderItem isMobile={isMobile} altColor>
-              {tradeDate}
-            </DisplayHeaderItem>
-          </DisplayHeader>
-          <ChartContainer
-            cursorStyle={cursorStyle}
-            isMobile={isMobile}
-            id={canvasId}
-            onMouseMoveCapture={(event) =>
-              onCanvasHoverHandler(candleList2D, event)
-            }
-            onClick={(event) => onCandleSelectHandler(candleList2D, event)}
-          />
-          <DataColumns isMobile={isMobile}>
-            <DataItem
+  const widget =
+    candleData !== null && candleIndex !== null ? (
+      <Layout isMobile={isMobile}>
+        <PriceChart isMobile={isMobile}>
+          <Display isMobile={isMobile}>
+            <DisplayHeader isMobile={isMobile}>
+              <DisplayHeaderItem isMobile={isMobile}>
+                ETH/USDT Price Chart
+              </DisplayHeaderItem>
+              <DisplayHeaderItem isMobile={isMobile} altColor>
+                {setDate(candleIndex, candleData, isMobile)}
+              </DisplayHeaderItem>
+            </DisplayHeader>
+            <ChartContainer
+              cursorStyle={cursorStyle}
               isMobile={isMobile}
-              header={'Open/Close'}
-              firstArg={openPrice}
-              secondArg={closePrice}
+              id={canvasId}
+              onMouseMoveCapture={(event) =>
+                onCanvasHoverHandler(candleList2D, event)
+              }
+              onClick={(event) => onCandleSelectHandler(candleList2D, event)}
             />
-            <DataItem
-              isMobile={isMobile}
-              header={'High/Low'}
-              firstArg={highPrice}
-              secondArg={lowPrice}
-            />
-            <DataItem
-              isMobile={isMobile}
-              header={isMobile ? 'Chage/Ampl' : 'Change/Amplitude'}
-              firstArg={change}
-              secondArg={amplitude}
-            />
-          </DataColumns>
-        </Display>
-        <TimeSwitch isMobile={isMobile}>{switchBar}</TimeSwitch>
-      </PriceChart>
-    </Layout>
-  );
+            <DataColumns isMobile={isMobile}>
+              <DataItem
+                isMobile={isMobile}
+                header={'Open/Close'}
+                firstArg={setOpen(candleIndex, candleData)}
+                secondArg={setClose(candleIndex, candleData)}
+              />
+              <DataItem
+                isMobile={isMobile}
+                header={'High/Low'}
+                firstArg={setHigh(candleIndex, candleData)}
+                secondArg={setLow(candleIndex, candleData)}
+              />
+              <DataItem
+                isMobile={isMobile}
+                header={isMobile ? 'Chage/Ampl' : 'Change/Amplitude'}
+                firstArg={setChange(candleIndex, candleData)}
+                secondArg={setAmplitude(candleIndex, candleData)}
+              />
+            </DataColumns>
+          </Display>
+          <TimeSwitch isMobile={isMobile}>{switchBar}</TimeSwitch>
+        </PriceChart>
+      </Layout>
+    ) : null;
 
   return widget;
 };

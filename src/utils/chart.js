@@ -72,7 +72,6 @@ const draw = (ctx, items, spread, colors, isSelected) => {
 };
 
 export const drawChart = (spread, items, id, colors, isSelected) => {
-  console.log('drawing');
   const canvas = document.getElementById(id);
   const context = canvas.getContext('2d');
   context.clearRect(0, 0, canvas.width, canvas.height);
