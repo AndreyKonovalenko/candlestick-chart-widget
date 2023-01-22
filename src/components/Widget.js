@@ -13,6 +13,7 @@ import DataItem from './display/dataColumns/DataItem';
 import ChartContainer from './display/chart/ChartContainer';
 import Layout from './Layout';
 import {
+  fetchData,
   findMaxMin,
   setDate,
   setOpen,
@@ -35,6 +36,7 @@ import theme from '../theme/theme';
 
 axios.defaults.baseURL = 'https://api.binance.com/';
 const Widget = () => {
+  let tradeDate, openPrice, closePrice, highPrice, lowPrice, change, amplitude;
   const canvasId = 'candlestick-chart';
   const { colors } = theme;
   const isMobile = useDeviceDetect();
@@ -44,38 +46,12 @@ const Widget = () => {
   const [spread, setSpread] = useState(null);
   const [candleList2D, setCandleList2D] = useState(null);
   const [activePicker, setActivePicker] = useState('15m');
-  const [candleIndex, setCandleIndex] = useState(null);
+  const [candleIndex, setCandleIndex] = useState(isMobile ? 20 : 31);
   const [cursorStyle, setCursorStyle] = useState(false);
-
-  //axios
-  const fetchData = (data) => {
-    axios
-      .get('/api/v3/klines', {
-        params: {
-          symbol: 'ETHUSDT',
-          interval: data.interval,
-          limit: data.isMobile ? '21' : '32',
-        },
-      })
-      .then((response) => {
-        // handle success
-        setCandleData(response.data);
-        setSpread(findMaxMin(response.data));
-        setCandleIndex(response.data.length - 1);
-      })
-      .catch((error) => {
-        // handle error
-        console.log(error);
-      })
-      .finally(() => {
-        console.log('Binance ETHUSDT klines loaded successfully!');
-      });
-  };
 
   const resetState = () => {
     setCandleData(null);
     setCandleList2D(null);
-    setCandleIndex(null);
   };
 
   const onSwitchClickHandler = (data) => {
@@ -130,14 +106,19 @@ const Widget = () => {
   switchBar.unshift(<TimePickerHeader key={uniqid()} />);
 
   useEffect(() => {
-    console.log(isMobile, prevScreen);
+    console.log(candleData);
     if (candleData === null) {
-      fetchData({ interval: activePicker, isMobile: isMobile });
+      fetchData(
+        { interval: activePicker, isMobile: isMobile },
+        setCandleData,
+        setSpread
+      );
     }
-    if (prevScreen !== isMobile) {
-      resetState();
-      fetchData({ interval: activePicker, isMobile: isMobile });
-    }
+    // if (prevScreen !== isMobile) {
+    //   resetState();
+    //   fetchData({ interval: activePicker, isMobile: isMobile });
+    // }
+
     if (
       candleData !== null &&
       spread !== null &&
@@ -160,6 +141,21 @@ const Widget = () => {
     spread,
   ]);
 
+  if (
+    candleData !== null &&
+    candleData !== undefined &&
+    spread !== null &&
+    candleIndex
+  ) {
+    tradeDate = setDate(candleIndex, candleData, isMobile);
+    openPrice = setOpen(candleIndex, candleData);
+    closePrice = setClose(candleIndex, candleData);
+    highPrice = setHigh(candleIndex, candleData);
+    lowPrice = setLow(candleIndex, candleData);
+    change = setChange(candleIndex, candleData);
+    amplitude = setAmplitude(candleIndex, candleData);
+  }
+
   const widget = (
     <Layout isMobile={isMobile}>
       <PriceChart isMobile={isMobile}>
@@ -169,7 +165,7 @@ const Widget = () => {
               ETH/USDT Price Chart
             </DisplayHeaderItem>
             <DisplayHeaderItem isMobile={isMobile} altColor>
-              {setDate(candleIndex, candleData, isMobile)}
+              {tradeDate}
             </DisplayHeaderItem>
           </DisplayHeader>
           <ChartContainer
@@ -185,20 +181,20 @@ const Widget = () => {
             <DataItem
               isMobile={isMobile}
               header={'Open/Close'}
-              firstArg={setOpen(candleIndex, candleData)}
-              secondArg={setClose(candleIndex, candleData)}
+              firstArg={openPrice}
+              secondArg={closePrice}
             />
             <DataItem
               isMobile={isMobile}
               header={'High/Low'}
-              firstArg={setHigh(candleIndex, candleData)}
-              secondArg={setLow(candleIndex, candleData)}
+              firstArg={highPrice}
+              secondArg={lowPrice}
             />
             <DataItem
               isMobile={isMobile}
               header={isMobile ? 'Chage/Ampl' : 'Change/Amplitude'}
-              firstArg={setChange(candleIndex, candleData)}
-              secondArg={setAmplitude(candleIndex, candleData)}
+              firstArg={change}
+              secondArg={amplitude}
             />
           </DataColumns>
         </Display>

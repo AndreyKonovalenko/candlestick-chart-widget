@@ -1,3 +1,28 @@
+import axios from 'axios';
+//axios
+export const fetchData = (data, setCandleData, setSpread) => {
+  axios
+    .get('/api/v3/klines', {
+      params: {
+        symbol: 'ETHUSDT',
+        interval: data.interval,
+        limit: data.isMobile ? '21' : '32',
+      },
+    })
+    .then((response) => {
+      // handle success
+      setCandleData(response.data);
+      setSpread(findMaxMin(response.data));
+    })
+    .catch((error) => {
+      // handle error
+      console.log(error);
+    })
+    .finally(() => {
+      console.log('Binance ETH/USDT klines loaded successfully!');
+    });
+};
+
 export const findMaxMin = (arr) => {
   const highest = arr.reduce((prev, cur) => {
     return parseFloat(cur[2]) > parseFloat(prev[2]) ? cur : prev;
@@ -33,9 +58,7 @@ export const getDate = (date, isMobile) => {
 };
 
 export const setDate = (candleIndex, candleData, isMobile) => {
-  if (candleData !== null) {
-    getDate(candleData[candleIndex][0], isMobile);
-  }
+  return candleIndex ? getDate(candleData[candleIndex][0], isMobile) : null;
 };
 
 export const setOpen = (candleIndex, candleData) => {
