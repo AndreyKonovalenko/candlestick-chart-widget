@@ -33,7 +33,9 @@ export const getDate = (date, isMobile) => {
 };
 
 export const setDate = (candleIndex, candleData, isMobile) => {
-  return candleIndex ? getDate(candleData[candleIndex][0], isMobile) : null;
+  if (candleData !== null) {
+    getDate(candleData[candleIndex][0], isMobile);
+  }
 };
 
 export const setOpen = (candleIndex, candleData) => {
