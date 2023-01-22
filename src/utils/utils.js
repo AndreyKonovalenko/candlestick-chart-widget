@@ -17,43 +17,59 @@ export const findMaxMin = (arr) => {
 
 export const getDate = (date, isMobile) => {
   const newDate = new Date(date);
-  const day = new Intl.DateTimeFormat("en-US", { day: "numeric" }).format(
+  const day = new Intl.DateTimeFormat('en-US', { day: 'numeric' }).format(
     newDate
   );
-  const month = new Intl.DateTimeFormat("en-US", {
-    month: isMobile ? "short" : "long",
+  const month = new Intl.DateTimeFormat('en-US', {
+    month: isMobile ? 'short' : 'long',
   }).format(newDate);
-  const time = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "numeric",
+  const time = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
     hour12: false,
   }).format(newDate);
 
   return `${day} ${month} ${time}`;
 };
 
-export const setSelectedColor = (element, context, colors) => {
-  if (element.type === "bullish") {
-    context.fillStyle = colors.display.chart.bullishSelected;
-    context.strokeStyle = colors.display.chart.bullishSelected;
-  }
-  if (element.type === "bearish") {
-    context.fillStyle = colors.display.chart.bearishSelected;
-    context.strokeStyle = colors.display.chart.bearishSelected;
-  }
-  context.fill(element.candle.rect);
-  context.stroke(element.candle.line);
+export const setDate = (candleIndex, candleData, isMobile) => {
+  return candleIndex ? getDate(candleData[candleIndex][0], isMobile) : null;
 };
 
-export const setDefaultColor = (element, context, colors) => {
-  if (element.type === "bullish") {
-    context.fillStyle = colors.display.chart.bullish;
-    context.strokeStyle = colors.display.chart.bullish;
-  }
-  if (element.type === "bearish") {
-    context.fillStyle = colors.display.chart.bearish;
-    context.strokeStyle = colors.display.chart.bearish;
-  }
-  context.fill(element.candle.rect);
-  context.stroke(element.candle.line);
+export const setOpen = (candleIndex, candleData) => {
+  return candleIndex ? parseFloat(candleData[candleIndex][1]).toFixed(2) : null;
+};
+
+export const setClose = (candleIndex, candleData) => {
+  return candleIndex ? parseFloat(candleData[candleIndex][4]).toFixed(2) : null;
+};
+
+export const setHigh = (candleIndex, candleData) => {
+  return candleIndex ? parseFloat(candleData[candleIndex][2]).toFixed(2) : null;
+};
+
+export const setLow = (candleIndex, candleData) => {
+  return candleIndex ? parseFloat(candleData[candleIndex][3]).toFixed(2) : null;
+};
+
+export const setChange = (candleIndex, candleData) => {
+  return candleIndex
+    ? `${(
+        (parseFloat(candleData[candleIndex][1]) /
+          parseFloat(candleData[candleIndex][4])) *
+          100 -
+        100
+      ).toFixed(2)}%`
+    : null;
+};
+
+export const setAmplitude = (candleIndex, candleData) => {
+  return candleIndex
+    ? `${(
+        (parseFloat(candleData[candleIndex][2]) /
+          parseFloat(candleData[candleIndex][3])) *
+          100 -
+        100
+      ).toFixed(2)}%`
+    : null;
 };

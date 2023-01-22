@@ -1,3 +1,4 @@
+// chart logic
 const culcCandleVerticalCoordinate = (spread, element, canvasHeight) => {
   const open = element[1];
   const high = element[2];
@@ -75,4 +76,47 @@ export const drawChart = (spread, items, id, colors, isSelected) => {
   const context = canvas.getContext('2d');
   context.clearRect(0, 0, canvas.width, canvas.height);
   return draw(context, items, spread, colors, isSelected);
+};
+
+// helpers
+
+export const setSelectedColor = (element, context, colors) => {
+  if (element.type === 'bullish') {
+    context.fillStyle = colors.display.chart.bullishSelected;
+    context.strokeStyle = colors.display.chart.bullishSelected;
+  }
+  if (element.type === 'bearish') {
+    context.fillStyle = colors.display.chart.bearishSelected;
+    context.strokeStyle = colors.display.chart.bearishSelected;
+  }
+  context.fill(element.candle.rect);
+  context.stroke(element.candle.line);
+};
+
+export const setDefaultColor = (element, context, colors) => {
+  if (element.type === 'bullish') {
+    context.fillStyle = colors.display.chart.bullish;
+    context.strokeStyle = colors.display.chart.bullish;
+  }
+  if (element.type === 'bearish') {
+    context.fillStyle = colors.display.chart.bearish;
+    context.strokeStyle = colors.display.chart.bearish;
+  }
+  context.fill(element.candle.rect);
+  context.stroke(element.candle.line);
+};
+
+export const pointInPath = (element, context, event) => {
+  return (
+    context.isPointInPath(
+      element.candle.rect,
+      event.nativeEvent.offsetX,
+      event.nativeEvent.offsetY
+    ) ||
+    context.isPointInStroke(
+      element.candle.line,
+      event.nativeEvent.offsetX,
+      event.nativeEvent.offsetY
+    )
+  );
 };
