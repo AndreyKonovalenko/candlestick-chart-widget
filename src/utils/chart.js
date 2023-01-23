@@ -71,10 +71,16 @@ const draw = (ctx, items, spread, colors, isSelected) => {
   return candles;
 };
 
-export const drawChart = (spread, items, id, colors, isSelected) => {
+export const clearChart = (id) => {
   const canvas = document.getElementById(id);
   const context = canvas.getContext('2d');
   context.clearRect(0, 0, canvas.width, canvas.height);
+};
+
+export const drawChart = (spread, items, id, colors, isSelected) => {
+  const canvas = document.getElementById(id);
+  const context = canvas.getContext('2d');
+  clearChart(id);
   return draw(context, items, spread, colors, isSelected);
 };
 

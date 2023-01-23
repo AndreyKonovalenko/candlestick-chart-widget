@@ -1,12 +1,12 @@
-import axios from "axios";
+import axios from 'axios';
 //axios
 export const fetchData = (data, setCandleData, setSpread, setCandleIndex) => {
   axios
-    .get("/api/v3/klines", {
+    .get('/api/v3/klines', {
       params: {
-        symbol: "ETHUSDT",
+        symbol: 'ETHUSDT',
         interval: data.interval,
-        limit: data.isMobile ? "21" : "32",
+        limit: data.isMobile ? '21' : '32',
       },
     })
     .then((response) => {
@@ -20,7 +20,7 @@ export const fetchData = (data, setCandleData, setSpread, setCandleIndex) => {
       console.log(error);
     })
     .finally(() => {
-      console.log("Binance ETH/USDT klines loaded successfully!");
+      console.log('Binance ETH/USDT klines loaded successfully!');
     });
 };
 
@@ -43,15 +43,15 @@ export const findMaxMin = (arr) => {
 
 export const getDate = (date, isMobile) => {
   const newDate = new Date(date);
-  const day = new Intl.DateTimeFormat("en-US", { day: "numeric" }).format(
+  const day = new Intl.DateTimeFormat('en-US', { day: 'numeric' }).format(
     newDate
   );
-  const month = new Intl.DateTimeFormat("en-US", {
-    month: isMobile ? "short" : "long",
+  const month = new Intl.DateTimeFormat('en-US', {
+    month: isMobile ? 'short' : 'long',
   }).format(newDate);
-  const time = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "numeric",
+  const time = new Intl.DateTimeFormat('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
     hour12: false,
   }).format(newDate);
 

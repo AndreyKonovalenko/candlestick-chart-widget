@@ -1,17 +1,17 @@
-import { useState, useEffect, useCallback } from "react";
-import useDeviceDetect from "../hooks/useDeviceDetect";
-import usePreviusValue from "../hooks/usePreviusValue";
-import PriceChart from "./PriceChart";
-import Display from "./display/Display";
-import DisplayHeader from "./display/DisplayHeader";
-import DisplayHeaderItem from "./display/DisplayHeaderItem";
-import TimeSwitch from "./timeSwitch/TimeSwitch";
-import TimePicker from "./timeSwitch/TimePicker";
-import TimePickerHeader from "./timeSwitch/TimePickerHeader";
-import DataColumns from "./display/dataColumns/DataColumns";
-import DataItem from "./display/dataColumns/DataItem";
-import ChartContainer from "./display/chart/ChartContainer";
-import Layout from "./Layout";
+import { useState, useEffect, useCallback } from 'react';
+import useDeviceDetect from '../hooks/useDeviceDetect';
+import usePreviusValue from '../hooks/usePreviusValue';
+import PriceChart from './PriceChart';
+import Display from './display/Display';
+import DisplayHeader from './display/DisplayHeader';
+import DisplayHeaderItem from './display/DisplayHeaderItem';
+import TimeSwitch from './timeSwitch/TimeSwitch';
+import TimePicker from './timeSwitch/TimePicker';
+import TimePickerHeader from './timeSwitch/TimePickerHeader';
+import DataColumns from './display/dataColumns/DataColumns';
+import DataItem from './display/dataColumns/DataItem';
+import ChartContainer from './display/chart/ChartContainer';
+import Layout from './Layout';
 import {
   fetchData,
   setDate,
@@ -21,46 +21,50 @@ import {
   setLow,
   setChange,
   setAmplitude,
-} from "../utils/utils";
+} from '../utils/utils';
 import {
   drawChart,
+  clearChart,
   setSelectedColor,
   setDefaultColor,
   pointInPath,
-} from "../utils/chart";
+} from '../utils/chart';
 
-import axios from "axios";
-import uniqid from "uniqid";
-import theme from "../theme/theme";
+import axios from 'axios';
+import uniqid from 'uniqid';
+import theme from '../theme/theme';
 
-axios.defaults.baseURL = "https://api.binance.com/";
+axios.defaults.baseURL = 'https://api.binance.com/';
 const Widget = () => {
-  const canvasId = "candlestick-chart";
+  const canvasId = 'candlestick-chart';
   const { colors } = theme;
   const isMobile = useDeviceDetect();
   const prevScreen = usePreviusValue(isMobile);
-  const intervals = ["15m", "1h", "4h", "1d", "1w"];
+  const intervals = ['15m', '1h', '4h', '1d', '1w'];
   const [candleData, setCandleData] = useState(null);
   const [spread, setSpread] = useState(null);
   const [candleList2D, setCandleList2D] = useState(null);
-  const [activePicker, setActivePicker] = useState("15m");
-  const [candleIndex, setCandleIndex] = useState(isMobile ? 20 : 31);
+  const [activePicker, setActivePicker] = useState('15m');
+  const [candleIndex, setCandleIndex] = useState(0);
   const [cursorStyle, setCursorStyle] = useState(false);
 
   const resetState = useCallback(() => {
+    clearChart(canvasId);
     setCandleData(null);
-    setCandleIndex(isMobile ? 20 : 31);
+    setSpread(null);
+    setCandleIndex(0);
     setCandleList2D(null);
-  }, [isMobile]);
+  }, []);
 
   const onSwitchClickHandler = (data) => {
+    clearChart(canvasId);
     setActivePicker(data.interval);
     resetState();
-    fetchData(data);
+    fetchData(data, setCandleData, setSpread, setCandleIndex);
   };
 
   const onCandleSelectHandler = (candleList2D, event) => {
-    const context = document.getElementById(canvasId).getContext("2d");
+    const context = document.getElementById(canvasId).getContext('2d');
     if (candleList2D !== null) {
       for (const element of candleList2D) {
         if (pointInPath(element, context, event)) {
@@ -72,7 +76,7 @@ const Widget = () => {
   };
 
   const onCanvasHoverHandler = (candleList2D, event) => {
-    const context = document.getElementById(canvasId).getContext("2d");
+    const context = document.getElementById(canvasId).getContext('2d');
     if (candleList2D !== null) {
       for (const element of candleList2D) {
         if (pointInPath(element, context, event)) {
@@ -97,8 +101,7 @@ const Widget = () => {
       isActive={element === activePicker ? true : false}
       onClick={(event) =>
         onSwitchClickHandler({ interval: element, isMobile: isMobile }, event)
-      }
-    >
+      }>
       {index === 0 ? element : element.toUpperCase()}
     </TimePicker>
   ));
@@ -106,7 +109,9 @@ const Widget = () => {
   switchBar.unshift(<TimePickerHeader key={uniqid()} />);
 
   useEffect(() => {
-    console.log(isMobile, prevScreen);
+    if (isMobile !== prevScreen && prevScreen !== undefined) {
+      resetState();
+    }
     if (candleData === null) {
       fetchData(
         { interval: activePicker, isMobile: isMobile },
@@ -115,24 +120,23 @@ const Widget = () => {
         setCandleIndex
       );
     }
-    if (isMobile !== prevScreen && prevScreen !== undefined) {
-      console.log("re-render PrevScren");
-      resetState();
+    if (candleData !== null) {
+      if (candleData.length === 21 && isMobile === false) {
+        resetState();
+      }
+      if (candleData.length === 32 && isMobile === true) {
+        resetState();
+      }
     }
-
     if (
       candleData !== null &&
       spread !== null &&
       candleIndex !== null &&
       candleList2D === null
     ) {
-      if (candleIndex < candleData.length) {
-        setCandleList2D(
-          drawChart(spread, candleData, canvasId, colors, candleIndex)
-        );
-      } else {
-        resetState();
-      }
+      setCandleList2D(
+        drawChart(spread, candleData, canvasId, colors, candleIndex)
+      );
     }
   }, [
     activePicker,
@@ -158,7 +162,7 @@ const Widget = () => {
             <DisplayHeaderItem isMobile={isMobile} altColor>
               {candleData !== null
                 ? setDate(candleIndex, candleData, isMobile)
-                : "Loading..."}
+                : 'Loading...'}
             </DisplayHeaderItem>
           </DisplayHeader>
           <ChartContainer
@@ -173,44 +177,34 @@ const Widget = () => {
           <DataColumns isMobile={isMobile}>
             <DataItem
               isMobile={isMobile}
-              header={"Open/Close"}
+              header={'Open/Close'}
               firstArg={
-                candleData !== null
-                  ? setOpen(candleIndex, candleData)
-                  : "0000.00"
+                candleData !== null ? setOpen(candleIndex, candleData) : null
               }
               secondArg={
-                candleData !== null
-                  ? setClose(candleIndex, candleData)
-                  : "0000.00"
+                candleData !== null ? setClose(candleIndex, candleData) : null
               }
             />
             <DataItem
               isMobile={isMobile}
-              header={"High/Low"}
+              header={'High/Low'}
               firstArg={
-                candleData !== null
-                  ? setHigh(candleIndex, candleData)
-                  : "0000.00"
+                candleData !== null ? setHigh(candleIndex, candleData) : null
               }
               secondArg={
-                candleData !== null
-                  ? setLow(candleIndex, candleData)
-                  : "0000.00"
+                candleData !== null ? setLow(candleIndex, candleData) : null
               }
             />
             <DataItem
               isMobile={isMobile}
-              header={isMobile ? "Chage/Ampl" : "Change/Amplitude"}
+              header={isMobile ? 'Chage/Ampl' : 'Change/Amplitude'}
               firstArg={
-                candleData !== null
-                  ? setChange(candleIndex, candleData)
-                  : "00.00"
+                candleData !== null ? setChange(candleIndex, candleData) : null
               }
               secondArg={
                 candleData !== null
                   ? setAmplitude(candleIndex, candleData)
-                  : "00.00"
+                  : null
               }
             />
           </DataColumns>
