@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from "react";
 
 const getIsMobile = () => window.innerWidth <= 600;
+const getIsRetina = () => window.matchMedia("(min-resolution: 2dppx)").matches;
 
 const useDeviceDetect = () => {
+  console.log(window.matchMedia("(min-resolution: 2dppx)").matches);
   const [isMobile, setIsMobile] = useState(getIsMobile());
+  const [isRetina, setIsRetina] = useState(getIsRetina());
   // null is default state for period when calculation not done
   // useEffect(() => {
   //   // const userAgent =
@@ -19,15 +22,16 @@ const useDeviceDetect = () => {
   useEffect(() => {
     const onResize = () => {
       setIsMobile(getIsMobile());
+      setIsRetina(getIsRetina());
     };
 
-    window.addEventListener('resize', onResize);
+    window.addEventListener("resize", onResize);
 
     return () => {
-      window.removeEventListener('resize', onResize);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 
-  return isMobile;
+  return { isMobile, isRetina };
 };
 export default useDeviceDetect;

@@ -1,4 +1,21 @@
 // chart logic
+const findMaxMin = (arr) => {
+  const highest = arr.reduce((prev, cur) => {
+    return parseFloat(cur[2]) > parseFloat(prev[2]) ? cur : prev;
+  });
+  const lowest = arr.reduce((prev, cur) =>
+    parseFloat(cur[3]) < parseFloat(prev[3]) ? cur : prev
+  );
+  const max = parseFloat(highest[2]);
+  const min = parseFloat(lowest[3]);
+  const spread = max - min;
+  return {
+    max: max,
+    min: min,
+    spread: spread,
+  };
+};
+
 const culcCandleVerticalCoordinate = (spread, element, canvasHeight) => {
   const open = element[1];
   const high = element[2];
@@ -44,11 +61,12 @@ const drawSingleCandle = (ctx, position, offset, colors, isSelected) => {
   ctx.fill(rect);
   return {
     candle: { rect: rect, line: line },
-    type: open >= close ? 'bullish' : 'bearish',
+    type: open >= close ? "bullish" : "bearish",
   };
 };
 
-const draw = (ctx, items, spread, colors, isSelected) => {
+const draw = (ctx, items, colors, isSelected) => {
+  const spread = findMaxMin(items);
   const candles = [];
   let offset = 4;
   for (const element of items) {
@@ -73,25 +91,24 @@ const draw = (ctx, items, spread, colors, isSelected) => {
 
 export const clearChart = (id) => {
   const canvas = document.getElementById(id);
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext("2d");
   context.clearRect(0, 0, canvas.width, canvas.height);
 };
 
-export const drawChart = (spread, items, id, colors, isSelected) => {
+export const drawChart = (items, id, colors, isSelected) => {
   const canvas = document.getElementById(id);
-  const context = canvas.getContext('2d');
+  const context = canvas.getContext("2d");
   clearChart(id);
-  return draw(context, items, spread, colors, isSelected);
+  return draw(context, items, colors, isSelected);
 };
 
-// helpers
-
+//  chart helpers
 export const setSelectedColor = (element, context, colors) => {
-  if (element.type === 'bullish') {
+  if (element.type === "bullish") {
     context.fillStyle = colors.display.chart.bullishSelected;
     context.strokeStyle = colors.display.chart.bullishSelected;
   }
-  if (element.type === 'bearish') {
+  if (element.type === "bearish") {
     context.fillStyle = colors.display.chart.bearishSelected;
     context.strokeStyle = colors.display.chart.bearishSelected;
   }
@@ -100,11 +117,11 @@ export const setSelectedColor = (element, context, colors) => {
 };
 
 export const setDefaultColor = (element, context, colors) => {
-  if (element.type === 'bullish') {
+  if (element.type === "bullish") {
     context.fillStyle = colors.display.chart.bullish;
     context.strokeStyle = colors.display.chart.bullish;
   }
-  if (element.type === 'bearish') {
+  if (element.type === "bearish") {
     context.fillStyle = colors.display.chart.bearish;
     context.strokeStyle = colors.display.chart.bearish;
   }
