@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/candlestick-chart-widget/static/css/main.e6c13ad2.css",
-    "main.js": "/candlestick-chart-widget/static/js/main.9389ffbc.js",
+    "main.js": "/candlestick-chart-widget/static/js/main.39d1b39f.js",
     "static/js/787.1e10c045.chunk.js": "/candlestick-chart-widget/static/js/787.1e10c045.chunk.js",
     "index.html": "/candlestick-chart-widget/index.html",
     "static/media/vetor.svg": "/candlestick-chart-widget/static/media/vetor.33c9bb742c21b32c4347151fd0828141.svg",
     "main.e6c13ad2.css.map": "/candlestick-chart-widget/static/css/main.e6c13ad2.css.map",
-    "main.9389ffbc.js.map": "/candlestick-chart-widget/static/js/main.9389ffbc.js.map",
+    "main.39d1b39f.js.map": "/candlestick-chart-widget/static/js/main.39d1b39f.js.map",
     "787.1e10c045.chunk.js.map": "/candlestick-chart-widget/static/js/787.1e10c045.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.9389ffbc.js"
+    "static/js/main.39d1b39f.js"
   ]
 }
