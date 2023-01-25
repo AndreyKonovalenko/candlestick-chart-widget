@@ -1,5 +1,5 @@
 const ChartContainer = (props) => {
-  const { isMobile, onMouseMoveCapture, onClick, id, cursorStyle } = props;
+  const { isMobile, onMouseMove, onClick, id, cursorStyle } = props;
 
   return (
     <canvas
@@ -7,7 +7,7 @@ const ChartContainer = (props) => {
       style={{ cursor: !cursorStyle ? 'default' : 'pointer' }}
       width={isMobile ? '315' : '480'}
       height='115'
-      onMouseMoveCapture={onMouseMoveCapture}
+      onMouseMove={onMouseMove}
       onClick={onClick}
     />
   );

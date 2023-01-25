@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 
 const getIsMobile = () => window.innerWidth <= 600;
-const getIsRetina = () => window.matchMedia("(min-resolution: 2dppx)").matches;
+const getIsRetina = () => window.matchMedia('(min-resolution: 2dppx)').matches;
+const getIsMobileLandscape = () => window.innerHeight <= 400;
 
 const useDeviceDetect = () => {
-  console.log(window.matchMedia("(min-resolution: 2dppx)").matches);
   const [isMobile, setIsMobile] = useState(getIsMobile());
   const [isRetina, setIsRetina] = useState(getIsRetina());
+  const [isLandscape, setIsLandscape] = useState(getIsMobileLandscape());
   // null is default state for period when calculation not done
   // useEffect(() => {
   //   // const userAgent =
@@ -16,22 +17,22 @@ const useDeviceDetect = () => {
   //   //     /Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i
   //   //   )
   //   // );
-  //   console.log(window.innerWidth);
   //   setMobile(window.innerWidth < 600 ? true : false);
   // }, []);
   useEffect(() => {
     const onResize = () => {
       setIsMobile(getIsMobile());
       setIsRetina(getIsRetina());
+      setIsLandscape(getIsMobileLandscape());
     };
 
-    window.addEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
 
     return () => {
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener('resize', onResize);
     };
   }, []);
 
-  return { isMobile, isRetina };
+  return { isMobile, isRetina, isLandscape };
 };
 export default useDeviceDetect;
