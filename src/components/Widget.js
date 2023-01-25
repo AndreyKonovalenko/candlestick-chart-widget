@@ -37,7 +37,7 @@ axios.defaults.baseURL = 'https://api.binance.com/';
 const Widget = () => {
   const canvasId = 'candlestick-chart';
   const { colors } = theme;
-  const { isMobile, isRetina, isLandscape } = useDeviceDetect();
+  const { isMobile, isRetina, isLandscape, isMobileDevice } = useDeviceDetect();
   const prevScreen = usePreviusValue(isMobile);
   const intervals = ['15m', '1h', '4h', '1d', '1w'];
   const [activePicker, setActivePicker] = useState('15m');
@@ -107,6 +107,7 @@ const Widget = () => {
   switchBar.unshift(<TimePickerHeader key={uniqid()} />);
 
   useEffect(() => {
+    console.log(isMobileDevice);
     if (isMobile !== prevScreen && prevScreen !== undefined) {
       resetState();
     }
@@ -136,6 +137,7 @@ const Widget = () => {
     colors,
     cursorStyle,
     isMobile,
+    isMobileDevice,
     prevScreen,
   ]);
 
@@ -157,7 +159,11 @@ const Widget = () => {
             cursorStyle={cursorStyle}
             isMobile={isMobile}
             id={canvasId}
-            onMouseMove={(event) => onCanvasHoverHandler(candleList2D, event)}
+            onMouseMove={
+              isMobileDevice
+                ? () => {}
+                : (event) => onCanvasHoverHandler(candleList2D, event)
+            }
             onClick={(event) => onCandleSelectHandler(candleList2D, event)}
           />
           <DataColumns isMobile={isMobile}>
