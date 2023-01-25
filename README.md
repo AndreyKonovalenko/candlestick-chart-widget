@@ -1,6 +1,6 @@
 ## Candlestick Chart Widget
 
-This is my React implementation of a candlestick chart widget
+This is my React implementation of a candlestick chart widget.
 It shows the change in the price of ethereum against the dollar at different time intervals.
 The data is requested through the Binance API and displayed in real time on the chart.
 
