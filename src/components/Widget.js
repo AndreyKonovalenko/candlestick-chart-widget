@@ -107,7 +107,6 @@ const Widget = () => {
   switchBar.unshift(<TimePickerHeader key={uniqid()} />);
 
   useEffect(() => {
-    console.log(isMobileDevice);
     if (isMobile !== prevScreen && prevScreen !== undefined) {
       resetState();
     }
