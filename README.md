@@ -1,7 +1,7 @@
 ## Candlestick Chart Widget
 ![Screenshot 2023-01-25 at 19 56 59](https://user-images.githubusercontent.com/16167616/214628891-8a00cf96-31b9-4274-8657-bf835f2ab8e6.png)
 
-Deployed on GitHub Pages: https://AndreyKonovalenko.github.io/candlestick-chart-widget
+[View Live](https://AndreyKonovalenko.github.io/candlestick-chart-widget)
 
 This is my React implementation of a candlestick chart widget.
 It shows the change in the price of ethereum against the dollar at different time intervals.
