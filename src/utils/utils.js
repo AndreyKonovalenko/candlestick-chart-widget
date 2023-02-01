@@ -16,7 +16,7 @@ export const fetchData = (data, setCandleData, setCandleIndex) => {
     })
     .catch((error) => {
       // handle error
-      error;
+      console.log(error);
     });
   // .finally(() => {
   //   ("Binance ETH/USDT klines loaded successfully!");
